@@ -1,0 +1,391 @@
+/* ==========================================================================
+   FORZA - ESTILOS PERSONALIZADOS (CSS con soporte para Bootstrap)
+   Identidad visual: Fondo negro/gris oscuro, acentos verde lima, estética gym moderna.
+   ========================================================================== */
+
+:root {
+  /* Paleta de colores */
+  --bg-main: #0c0d10;
+  --bg-surface: #14161c;
+  --bg-card: #1b1e26;
+  --bg-card-hover: #222631;
+  --border-color: #272c38;
+  
+  /* Color principal de la marca (Verde Lima Gimnasio) */
+  --color-primary: #ccff00;
+  --color-primary-hover: #b3e600;
+  --color-primary-dark: #1f2b05;
+  --color-primary-glow: rgba(204, 255, 0, 0.25);
+
+  /* Textos */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Bordes redondeados */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 50rem;
+
+  /* Sombras y transiciones */
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 20px rgba(204, 255, 0, 0.25);
+  --transition: all 0.25s ease-in-out;
+
+  /* Tipografía */
+  --font-base: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+/* ==========================================================================
+   RESETEO Y SOBRESCRITURA DE BOOTSTRAP PARA EL TEMA OSCURO
+   ========================================================================== */
+
+body {
+  font-family: var(--font-base);
+  background-color: var(--bg-main) !important;
+  color: var(--text-primary) !important;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Enlaces por defecto */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+/* Envoltorio principal (Layout) */
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2.5rem 0 4rem 0;
+}
+
+/* ==========================================================================
+   BARRA DE NAVEGACIÓN (React Bootstrap Navbar personalizada)
+   ========================================================================== */
+
+.forza-navbar {
+  background-color: rgba(20, 22, 28, 0.9) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.85rem 0 !important;
+}
+
+.forza-brand {
+  font-size: 1.5rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 1.5px;
+  color: var(--text-primary) !important;
+}
+
+.forza-brand span {
+  color: var(--color-primary);
+}
+
+.forza-nav-link {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary) !important;
+  padding: 0.5rem 0.85rem !important;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.forza-nav-link:hover {
+  color: var(--color-primary) !important;
+}
+
+.forza-nav-link.active {
+  color: var(--color-primary) !important;
+  background-color: var(--color-primary-dark) !important;
+  font-weight: 700;
+}
+
+/* Botón toggle hamburguesa de Bootstrap */
+.forza-navbar .navbar-toggler {
+  border-color: var(--border-color) !important;
+  padding: 0.4rem 0.6rem;
+}
+
+.forza-navbar .navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem var(--color-primary-glow) !important;
+}
+
+.forza-navbar .navbar-toggler-icon {
+  filter: invert(1);
+}
+
+/* ==========================================================================
+   BOTONES PERSONALIZADOS FORZA (Combinados con React Bootstrap Button)
+   ========================================================================== */
+
+.forza-btn-primary {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: #0c0d10 !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-md) !important;
+  padding: 0.65rem 1.4rem !important;
+  box-shadow: var(--shadow-glow);
+  transition: var(--transition) !important;
+}
+
+.forza-btn-primary:hover,
+.forza-btn-primary:focus {
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
+  color: #0c0d10 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(204, 255, 0, 0.45) !important;
+}
+
+.forza-btn-outline {
+  background-color: transparent !important;
+  border: 1px solid var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-md) !important;
+  padding: 0.65rem 1.4rem !important;
+  transition: var(--transition) !important;
+}
+
+.forza-btn-outline:hover,
+.forza-btn-outline:focus {
+  background-color: var(--color-primary-dark) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  transform: translateY(-2px);
+}
+
+.forza-btn-secondary {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-md) !important;
+  padding: 0.65rem 1.4rem !important;
+  transition: var(--transition) !important;
+}
+
+.forza-btn-secondary:hover,
+.forza-btn-secondary:focus {
+  background-color: var(--bg-card-hover) !important;
+  border-color: var(--text-secondary) !important;
+  color: var(--text-primary) !important;
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   TARJETAS (React Bootstrap Card personalizada)
+   ========================================================================== */
+
+.forza-card {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-card);
+  color: var(--text-primary) !important;
+  transition: var(--transition);
+  height: 100%;
+}
+
+.forza-card:hover {
+  border-color: rgba(204, 255, 0, 0.4) !important;
+  transform: translateY(-4px);
+}
+
+.forza-card .card-body {
+  padding: 1.6rem !important;
+}
+
+.forza-card .card-title {
+  color: var(--text-primary) !important;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.forza-card .card-text {
+  color: var(--text-secondary) !important;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   FORMULARIOS (React Bootstrap Form personalizado)
+   ========================================================================== */
+
+.forza-form-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.forza-form-control {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.75rem 1rem !important;
+  transition: var(--transition) !important;
+}
+
+.forza-form-control:focus {
+  background-color: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 0.25rem var(--color-primary-glow) !important;
+  outline: none !important;
+}
+
+.forza-form-control::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* ==========================================================================
+   BADGES Y ALERTAS (React Bootstrap Badge y Alert personalizados)
+   ========================================================================== */
+
+.forza-badge {
+  background-color: var(--color-primary-dark) !important;
+  color: var(--color-primary) !important;
+  border: 1px solid var(--color-primary);
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.forza-badge-muted {
+  background-color: var(--bg-surface) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border-color);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+}
+
+.forza-alert {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-color) !important;
+  border-left: 4px solid var(--color-primary) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+/* ==========================================================================
+   HERO / PORTADA FORZA
+   ========================================================================== */
+
+.hero-section {
+  text-align: center;
+  padding: 3.5rem 1rem 2.5rem 1rem;
+}
+
+.hero-tag {
+  display: inline-block;
+  margin-bottom: 1.2rem;
+  padding: 0.4rem 1.1rem;
+  background-color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title span {
+  color: var(--color-primary);
+  text-shadow: 0 0 30px rgba(204, 255, 0, 0.4);
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.15rem;
+  max-width: 650px;
+  margin: 0 auto 2rem auto;
+}
+
+/* ==========================================================================
+   PIE DE PÁGINA (Footer)
+   ========================================================================== */
+
+.forza-footer {
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  padding: 2.5rem 0 1.5rem 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+.footer-brand {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.footer-brand span {
+  color: var(--color-primary);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   ESTILOS PARA PÁGINAS EN DESARROLLO Y NOTAS DEL EQUIPO
+   ========================================================================== */
+
+.forza-placeholder-card {
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.forza-placeholder-card h1 {
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+.team-note {
+  background-color: var(--bg-surface);
+  border-left: 4px solid var(--color-primary);
+  padding: 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
