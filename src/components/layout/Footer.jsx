@@ -1,40 +1,36 @@
 import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 /**
- * Componente Footer adaptado con React Bootstrap.
- * Utiliza Container, Row y Col para estructurar el pie de página de forma responsive.
+ * Componente Footer adaptado al Diseño B de FORZA.
+ * Es sobrio, discreto y se ubica al pie del contenido principal sin competir con el Sidebar.
  */
 function Footer() {
   const anioActual = new Date().getFullYear();
 
   return (
-    <footer className="forza-footer">
-      <Container>
-        <Row className="gy-3 align-items-center">
-          <Col md={6}>
-            <div className="footer-brand mb-1">
-              FORZA <span>GYM APP</span>
-            </div>
-            <p className="mb-0 text-secondary">
-              Tu plataforma para planificar, registrar y dominar tus entrenamientos.
-            </p>
+    <footer className="forza-layout-footer" aria-label="Pie de página">
+      <Container fluid className="px-4">
+        <Row className="gy-2 align-items-center">
+          <Col md={6} className="text-center text-md-start">
+            <span className="fw-bold text-light me-2">FORZA</span>
+            <span className="text-secondary small">
+              Plataforma integral para gestión y optimización de entrenamientos.
+            </span>
           </Col>
 
-          <Col md={6} className="text-md-end">
-            <p className="mb-1 text-light">
-              <strong>Proyecto Integrador</strong> — Desarrollo Frontend
-            </p>
-            <p className="mb-0 text-secondary">
-              Construido con React, React Bootstrap y CSS personalizado.
-            </p>
+          <Col md={6} className="text-center text-md-end">
+            <div className="d-inline-flex gap-3 small text-secondary">
+              <Link to="/" className="text-secondary">Inicio</Link>
+              <span>•</span>
+              <Link to="/ejercicios" className="text-secondary">Ejercicios</Link>
+              <span>•</span>
+              <Link to="/rutinas" className="text-secondary">Rutinas</Link>
+              <span>•</span>
+              <span>&copy; {anioActual} FORZA</span>
+            </div>
           </Col>
         </Row>
-
-        <div className="footer-bottom">
-          <p className="mb-0">
-            &copy; {anioActual} FORZA. Todos los derechos reservados.
-          </p>
-        </div>
       </Container>
     </footer>
   );

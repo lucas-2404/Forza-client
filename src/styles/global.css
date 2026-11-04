@@ -4,23 +4,25 @@
    ========================================================================== */
 
 :root {
-  /* Paleta de colores */
-  --bg-main: #0c0d10;
-  --bg-surface: #14161c;
-  --bg-card: #1b1e26;
-  --bg-card-hover: #222631;
-  --border-color: #272c38;
+  /* Paleta de colores oficial FORZA - Diseño B */
+  --bg-main: #080B0D;
+  --bg-sidebar: #0D1114;
+  --bg-topbar: #14191D;
+  --bg-card: #171C20;
+  --bg-card-hover: #1F252B;
+  --border-color: #2A3035;
   
-  /* Color principal de la marca (Verde Lima Gimnasio) */
-  --color-primary: #ccff00;
-  --color-primary-hover: #b3e600;
-  --color-primary-dark: #1f2b05;
-  --color-primary-glow: rgba(204, 255, 0, 0.25);
+  /* Verde Lima Principal y Alternativo */
+  --color-primary: #9EF01A;
+  --color-primary-alt: #A3FF12;
+  --color-primary-hover: #8ee012;
+  --color-primary-dark: #192704;
+  --color-primary-glow: rgba(158, 240, 26, 0.25);
 
   /* Textos */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --text-primary: #FFFFFF;
+  --text-secondary: #A7ADB4;
+  --text-muted: #64748B;
 
   /* Bordes redondeados */
   --radius-sm: 8px;

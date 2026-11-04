@@ -35,10 +35,15 @@ forza-frontend/
 │   ├── assets/                 # Recursos gráficos importables
 │   │
 │   ├── components/             # Componentes reutilizables de la interfaz
-│   │   ├── layout/
-│   │   │   ├── Navbar.jsx      # Barra superior adaptada con React Bootstrap (Navbar, Nav, Container, Button)
-│   │   │   ├── Footer.jsx      # Pie de página adaptado con React Bootstrap (Container, Row, Col)
-│   │   │   └── Layout.jsx      # Contenedor esqueleto (Navbar + Outlet + Footer)
+│   │   ├── layout/             # Componentes del Diseño B (Sidebar + Topbar + Footer)
+│   │   │   ├── Sidebar.jsx     # Barra lateral fija con logo FORZA, links de navegación y perfil
+│   │   │   ├── Topbar.jsx      # Barra superior con buscador visual, notificaciones y avatar
+│   │   │   ├── NavigationItems.jsx # Lista modular de enlaces de navegación (NavLink)
+│   │   │   ├── Icons.jsx       # Iconos SVG nativos (mancuerna, casa, calendario, etc.)
+│   │   │   ├── Footer.jsx      # Pie de página sobrio integrado al pie del área principal
+│   │   │   ├── Layout.jsx      # Envoltorio del Diseño B (Sidebar + Topbar + Outlet + Offcanvas)
+│   │   │   ├── Navbar.jsx      # Componente Navbar previo conservado por compatibilidad
+│   │   │   └── layout.css      # Estilos dedicados del Sidebar, Topbar y menú responsive
 │   │   │
 │   │   ├── ejercicios/         # Componentes dedicados al catálogo de ejercicios (Módulo 2)
 │   │   ├── rutinas/            # Componentes dedicados a la gestión de rutinas (Módulo 1)

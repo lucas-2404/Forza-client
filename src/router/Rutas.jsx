@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 
-// Páginas de la aplicación
+// Páginas existentes de la aplicación (desarrolladas por el equipo)
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
@@ -12,28 +12,53 @@ import PerfilPage from '../pages/PerfilPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 /**
- * Definición centralizada de las Rutas de FORZA
- * Utiliza React Router DOM v6 con un Layout general que incluye Navbar y Footer.
+ * Definición centralizada de las Rutas de FORZA.
+ * Integra el nuevo Layout (Diseño B) manteniendo intactos los componentes de los compañeros.
  */
 function Rutas() {
   return (
     <Routes>
-      {/* Rutas principales envueltas en el Layout general */}
+      {/* Rutas envueltas en el Layout general (Sidebar + Topbar + Outlet + Footer) */}
       <Route path="/" element={<Layout />}>
-        {/* Ruta principal / Home */}
+        {/* 1. Inicio */}
         <Route index element={<HomePage />} />
 
-        {/* Módulo de Autenticación */}
+        {/* 2. Ejercicios */}
+        <Route path="ejercicios" element={<EjerciciosPage />} />
+
+        {/* 3. Rutinas */}
+        <Route path="rutinas" element={<RutinaPage />} />
+
+        {/* 4. Progreso / Dashboard */}
+        <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="progreso" element={<DashboardPage />} />
+
+        {/* 5. Favoritos (Destino preparado visualmente sin funcionalidad invasiva) */}
+        <Route
+          path="favoritos"
+          element={
+            <div className="container py-4 text-center">
+              <div className="forza-placeholder-card">
+                <h1>❤️ Ejercicios y Rutinas Favoritas</h1>
+                <p className="text-secondary">
+                  Esta sección está reservada para el almacenamiento de favoritos.
+                </p>
+                <div className="team-note mx-auto" style={{ maxWidth: '550px' }}>
+                  <strong>Nota para el equipo:</strong> Módulo de Favoritos preparado para recibir la lógica correspondiente.
+                </div>
+              </div>
+            </div>
+          }
+        />
+
+        {/* Mi Perfil */}
+        <Route path="perfil" element={<PerfilPage />} />
+
+        {/* Módulos de Autenticación */}
         <Route path="login" element={<LoginPage />} />
         <Route path="registro" element={<RegisterPage />} />
 
-        {/* Módulos de Entrenamiento y Gestión */}
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="ejercicios" element={<EjerciciosPage />} />
-        <Route path="rutinas" element={<RutinaPage />} />
-        <Route path="perfil" element={<PerfilPage />} />
-
-        {/* Ruta para capturar cualquier página no encontrada (404) */}
+        {/* Ruta comodín para capturar 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
@@ -41,4 +66,3 @@ function Rutas() {
 }
 
 export default Rutas;
-
