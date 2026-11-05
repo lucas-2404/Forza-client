@@ -1,165 +1,268 @@
-import { useState } from 'react';
+import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Card, Button, Badge, Alert, Modal } from 'react-bootstrap';
-import { motion } from 'framer-motion';
-import Swal from 'sweetalert2';
+import { DumbbellIcon, CalendarIcon, ChartIcon, HeartIcon } from '../components/layout/Icons';
+import './HomePage.css';
 
 /**
- * Pantalla Principal (HomePage) adaptada con React Bootstrap.
- * Utiliza: Container, Row, Col, Card, Button, Badge, Alert y Modal de react-bootstrap.
- * Mantiene la animación con Framer Motion y la integración con SweetAlert2.
+ * PÁGINA DE INICIO (HomePage) — DISEÑO 1 DE FORZA
+ *
+ * Estructura de la página:
+ * 1. Hero Principal: Título destacado, descripción, botones de acción e imagen de fondo.
+ * 2. Accesos Rápidos: 4 tarjetas interactivas que enlazan a las secciones principales.
+ * 3. Ejercicios Destacados: 4 tarjetas con imágenes deportivas reales y grupo muscular.
+ * 4. Tu Rutina de Hoy: Tarjeta de rutina sugerida de cuerpo completo.
+ * 5. Sección Motivacional: Imagen inspiradora de alta calidad y frase de disciplina.
+ *
+ * Tecnologías: React, React Bootstrap (80%), CSS Personalizado (20%) y React Router.
  */
 function HomePage() {
-  // Estado para controlar la visibilidad del Modal de React Bootstrap
-  const [showModal, setShowModal] = useState(false);
+  // Arreglo con los 4 accesos rápidos principales de la aplicación
+  const accesosRapidos = [
+    {
+      id: 1,
+      titulo: 'Ejercicios',
+      descripcion: 'Explorá nuestro catálogo de ejercicios.',
+      ruta: '/ejercicios',
+      icono: DumbbellIcon,
+    },
+    {
+      id: 2,
+      titulo: 'Mis rutinas',
+      descripcion: 'Organizá tus entrenamientos.',
+      ruta: '/rutinas',
+      icono: CalendarIcon,
+    },
+    {
+      id: 3,
+      titulo: 'Mi progreso',
+      descripcion: 'Consultá tu actividad.',
+      ruta: '/dashboard',
+      icono: ChartIcon,
+    },
+    {
+      id: 4,
+      titulo: 'Favoritos',
+      descripcion: 'Accedé a tus ejercicios guardados.',
+      ruta: '/favoritos',
+      icono: HeartIcon,
+    },
+  ];
 
-  const handleOpenModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  // Arreglo con los 4 ejercicios destacados (imágenes locales en public/img)
+  const ejerciciosDestacados = [
+    {
+      id: 1,
+      nombre: 'Press de banca',
+      grupoMuscular: 'Pecho',
+      imagen: '/img/press-banca.webp',
+      alt: 'Atleta ejecutando press de banca en banco plano con barra',
+    },
+    {
+      id: 2,
+      nombre: 'Sentadilla',
+      grupoMuscular: 'Piernas',
+      imagen: '/img/sentadilla.webp',
+      alt: 'Persona realizando sentadilla trasera con barra olímpica',
+    },
+    {
+      id: 3,
+      nombre: 'Dominadas',
+      grupoMuscular: 'Espalda',
+      imagen: '/img/dominadas.webp',
+      alt: 'Entrenamiento de dominadas en barra para dorsales y espalda',
+    },
+    {
+      id: 4,
+      nombre: 'Curl de bíceps',
+      grupoMuscular: 'Bíceps',
+      imagen: '/img/curl-biceps.webp',
+      alt: 'Ejercicio de curl de bíceps con mancuernas de pie',
+    },
+  ];
 
-  // Alerta interactiva con SweetAlert2
-  const mostrarSweetAlert = () => {
-    Swal.fire({
-      title: '¡FORZA + React Bootstrap!',
-      text: 'React Bootstrap, SweetAlert2 y Framer Motion están funcionando en perfecta armonía.',
-      icon: 'success',
-      confirmButtonText: 'Genial',
-      confirmButtonColor: '#ccff00',
-      background: '#1b1e26',
-      color: '#f8fafc',
-    });
-  };
+  // Lista de ejercicios para la rutina sugerida de hoy
+  const ejerciciosRutinaHoy = [
+    { id: 1, nombre: 'Sentadillas', series: '4 series × 8-10 reps', grupo: 'Piernas' },
+    { id: 2, nombre: 'Press de banca', series: '4 series × 8 reps', grupo: 'Pecho' },
+    { id: 3, nombre: 'Dominadas', series: '3 series × al fallo', grupo: 'Espalda' },
+    { id: 4, nombre: 'Curl de bíceps', series: '3 series × 12 reps', grupo: 'Bíceps' },
+  ];
 
   return (
-    <Container>
-      {/* Sección Hero con animación sutil de Framer Motion */}
-      <motion.section 
-        className="hero-section"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <span className="hero-tag">ENTRENA SIN LÍMITES</span>
-        <h1 className="hero-title">
-          GESTIONÁ TUS RUTINAS CON <span>FORZA</span>
-        </h1>
-        <p className="hero-subtitle">
-          Diseña entrenamientos personalizados, explora ejercicios por grupo muscular
-          y lleva un registro claro de tu progreso en el gimnasio.
-        </p>
-
-        {/* Botones de acción utilizando el componente Button de React Bootstrap */}
-        <div className="d-flex justify-content-center gap-3 flex-wrap">
-          <Button as={Link} to="/ejercicios" className="forza-btn-primary">
-            Explorar Ejercicios 🏋️
-          </Button>
-          <Button as={Link} to="/rutinas" className="forza-btn-secondary">
-            Ver Rutinas
-          </Button>
-          <Button onClick={handleOpenModal} className="forza-btn-outline">
-            Info Modal ℹ️
-          </Button>
-          <Button onClick={mostrarSweetAlert} className="forza-btn-secondary">
-            Test SweetAlert2 🔔
-          </Button>
+    <Container fluid className="px-0">
+      {/* ====================================================================
+          A. HERO PRINCIPAL
+          ==================================================================== */}
+      <section className="home-hero p-4 p-md-5 mb-5" aria-label="Sección de bienvenida">
+        <div className="py-2 py-md-3">
+          <Badge className="forza-badge mb-3">Tu centro de entrenamiento</Badge>
+          <h1 className="home-hero-title mb-3">
+            Tu progreso <span>comienza aquí</span>
+          </h1>
+          <p className="home-hero-desc mb-4">
+            Explorá ejercicios, organizá tus rutinas y llevá tus entrenamientos al siguiente nivel con FORZA.
+          </p>
+          <div className="d-flex flex-wrap gap-3">
+            <Button as={Link} to="/ejercicios" className="forza-btn-primary">
+              Explorar ejercicios
+            </Button>
+            <Button as={Link} to="/rutinas" className="forza-btn-secondary">
+              Ver mis rutinas
+            </Button>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
-      {/* Alerta informativa de React Bootstrap */}
-      <Alert className="forza-alert my-4">
-        <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <span>
-            💡 <strong>Tecnologías activas:</strong> React Bootstrap para la maquetación responsive y componentes interactivos, combinado con CSS personalizado para la identidad oscura y verde lima de FORZA.
-          </span>
-          <Badge className="forza-badge">V1.0 Activo</Badge>
-        </div>
-      </Alert>
-
-      {/* Grid de módulos con Row, Col y Card de React Bootstrap */}
-      <section className="mt-4">
-        <h2 className="h4 fw-bold text-light mb-2">Módulos del Sistema</h2>
-        <p className="text-secondary mb-4">
-          Estructura distribuida para el trabajo en paralelo de los cuatro integrantes del equipo:
-        </p>
-
-        <Row className="g-4">
-          <Col md={4}>
-            <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-              <Card className="forza-card">
-                <Card.Body>
-                  <div className="fs-1 mb-2">📋</div>
-                  <Card.Title>Gestión de Rutinas</Card.Title>
-                  <Card.Text>
-                    Crea y organiza planes de entrenamiento semanales divididos por objetivos y días.
-                  </Card.Text>
-                  <Badge className="forza-badge">Módulo 1</Badge>
-                </Card.Body>
-              </Card>
-            </motion.div>
-          </Col>
-
-          <Col md={4}>
-            <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-              <Card className="forza-card">
-                <Card.Body>
-                  <div className="fs-1 mb-2">💪</div>
-                  <Card.Title>Catálogo de Ejercicios</Card.Title>
-                  <Card.Text>
-                    Biblioteca de ejercicios con detalles técnicos, series, repeticiones y grupos musculares.
-                  </Card.Text>
-                  <Badge className="forza-badge">Módulo 2</Badge>
-                </Card.Body>
-              </Card>
-            </motion.div>
-          </Col>
-
-          <Col md={4}>
-            <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-              <Card className="forza-card">
-                <Card.Body>
-                  <div className="fs-1 mb-2">📊</div>
-                  <Card.Title>Dashboard y Usuarios</Card.Title>
-                  <Card.Text>
-                    Panel de control con métricas del usuario, perfil personal y autenticación completa.
-                  </Card.Text>
-                  <Badge className="forza-badge">Módulos 3 y 4</Badge>
-                </Card.Body>
-              </Card>
-            </motion.div>
-          </Col>
+      {/* ====================================================================
+          B. ACCESOS RÁPIDOS (4 Tarjetas mapeadas dinámicamente)
+          ==================================================================== */}
+      <section className="mb-5" aria-label="Accesos rápidos">
+        <Row className="g-3 g-md-4">
+          {accesosRapidos.map((acceso) => {
+            const Icono = acceso.icono;
+            return (
+              <Col xs={12} sm={6} lg={3} key={acceso.id}>
+                <Link to={acceso.ruta} className="quick-access-card p-3 p-md-4 h-100">
+                  <div className="d-flex align-items-center gap-3 mb-2">
+                    <div className="quick-access-icon-box" aria-hidden="true">
+                      <Icono size={22} />
+                    </div>
+                    <h2 className="h6 fw-bold text-white mb-0">{acceso.titulo}</h2>
+                  </div>
+                  <p className="text-secondary small mb-0">{acceso.descripcion}</p>
+                </Link>
+              </Col>
+            );
+          })}
         </Row>
       </section>
 
-      {/* Modal de React Bootstrap */}
-      <Modal 
-        show={showModal} 
-        onHide={handleCloseModal} 
-        centered
-        contentClassName="bg-dark text-light border border-secondary"
-      >
-        <Modal.Header closeButton closeVariant="white" className="border-secondary">
-          <Modal.Title className="text-light fw-bold">
-            ⚡ Proyecto FORZA - Modal de Demostración
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p className="text-secondary">
-            Este modal es un componente nativo de <strong>React Bootstrap</strong> (<code>&lt;Modal&gt;</code>) funcionando con estado de React (<code>useState</code>).
-          </p>
-          <ul className="text-secondary mb-0">
-            <li>Estructura adaptada al diseño responsive.</li>
-            <li>Colores oscuros con acento verde lima de FORZA.</li>
-            <li>Listo para ser reutilizado en creación de rutinas y confirmaciones.</li>
-          </ul>
-        </Modal.Body>
-        <Modal.Footer className="border-secondary">
-          <Button variant="secondary" onClick={handleCloseModal} className="forza-btn-secondary btn-sm">
-            Cerrar
+      {/* ====================================================================
+          C. EJERCICIOS DESTACADOS (4 Tarjetas con imágenes locales)
+          ==================================================================== */}
+      <section className="mb-5" aria-label="Ejercicios destacados">
+        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+          <div>
+            <h2 className="h4 fw-bold text-white mb-1">Ejercicios destacados</h2>
+            <p className="text-secondary small mb-0">
+              Movimientos fundamentales recomendados para ganar fuerza y masa muscular.
+            </p>
+          </div>
+          <Button as={Link} to="/ejercicios" className="forza-btn-outline btn-sm">
+            Ver catálogo completo →
           </Button>
-          <Button onClick={handleCloseModal} className="forza-btn-primary btn-sm">
-            Entendido
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        </div>
+
+        <Row className="g-4">
+          {ejerciciosDestacados.map((ejercicio) => (
+            <Col xs={12} sm={6} lg={3} key={ejercicio.id}>
+              <Card className="exercise-card">
+                <div className="exercise-img-container">
+                  <img
+                    src={ejercicio.imagen}
+                    alt={ejercicio.alt}
+                    className="exercise-card-img"
+                    loading="lazy"
+                  />
+                </div>
+                <Card.Body className="p-3 d-flex flex-column justify-content-between">
+                  <div>
+                    <Badge className="forza-badge-muted mb-2">{ejercicio.grupoMuscular}</Badge>
+                    <Card.Title className="h6 fw-bold text-white mb-3">
+                      {ejercicio.nombre}
+                    </Card.Title>
+                  </div>
+                  <Button as={Link} to="/ejercicios" className="forza-btn-outline btn-sm w-100">
+                    Explorar ejercicios
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </section>
+
+      {/* ====================================================================
+          D. TU RUTINA DE HOY Y E. SECCIÓN MOTIVACIONAL (Distribución equilibrada)
+          ==================================================================== */}
+      <section className="mb-4" aria-label="Rutina sugerida y motivación">
+        <Row className="g-4 align-items-stretch">
+          {/* D. SECCIÓN: TU RUTINA DE HOY */}
+          <Col xs={12} lg={6}>
+            <Card className="routine-card p-4 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h2 className="h4 fw-bold text-white mb-0">Tu rutina de hoy</h2>
+                  <Badge className="forza-badge">Rutina sugerida</Badge>
+                </div>
+
+                <div className="mb-4">
+                  <h3 className="h5 fw-bold" style={{ color: 'var(--color-primary, #9EF01A)' }}>
+                    Entrenamiento de cuerpo completo
+                  </h3>
+                  <p className="text-secondary small mb-0">
+                    Sesión integral diseñada para activar los principales grupos musculares.
+                  </p>
+                </div>
+
+                {/* Lista de ejercicios sugeridos */}
+                <div className="d-flex flex-column gap-2 mb-4">
+                  {ejerciciosRutinaHoy.map((item) => (
+                    <div key={item.id} className="routine-exercise-item">
+                      <div className="d-flex align-items-center">
+                        <span className="routine-bullet" aria-hidden="true" />
+                        <span className="fw-semibold text-white">{item.nombre}</span>
+                      </div>
+                      <span className="small text-secondary">{item.series}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <Button as={Link} to="/rutinas" className="forza-btn-primary w-100">
+                  Ver mis rutinas
+                </Button>
+              </div>
+            </Card>
+          </Col>
+
+          {/* E. SECCIÓN MOTIVACIONAL */}
+          <Col xs={12} lg={6}>
+            <Card className="motivation-card p-4 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h2 className="h4 fw-bold text-white mb-0">Motivación diaria</h2>
+                  <Badge className="forza-badge-muted">Mentalidad FORZA</Badge>
+                </div>
+
+                <p className="text-secondary small mb-3">
+                  La constancia y el esfuerzo diario construyen los resultados que buscas.
+                </p>
+
+                {/* Imagen Motivacional local (public/img/motivacion.webp) */}
+                <div className="motivation-img-box mb-3">
+                  <img
+                    src="/img/motivacion.webp"
+                    alt="Atleta en el gimnasio superando sus límites - Mentalidad FORZA"
+                    className="motivation-img"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+
+              <div className="border-top border-secondary pt-3 mt-auto">
+                <blockquote className="mb-0 text-center">
+                  <p className="fst-italic text-light small mb-1">
+                    "La disciplina es el puente entre tus metas y tus logros."
+                  </p>
+                  <footer className="text-secondary small">— Comunidad FORZA</footer>
+                </blockquote>
+              </div>
+            </Card>
+          </Col>
+        </Row>
+      </section>
     </Container>
   );
 }

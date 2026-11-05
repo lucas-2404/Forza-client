@@ -1,0 +1,175 @@
+/* ==========================================================================
+   FORZA - ESTILOS ESPECÍFICOS DE HOMEPAGE (Diseño 1)
+   Regla: 80% Bootstrap / 20% CSS Personalizado
+   ========================================================================== */
+
+/* 1. Hero Principal con imagen de fondo y capa oscura */
+.home-hero {
+  position: relative;
+  background: linear-gradient(180deg,
+      rgba(8, 11, 13, 0.75) 0%,
+      rgba(8, 11, 13, 0.90) 100%),
+    url('/img/hero-gym.webp') center/cover no-repeat;
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: 16px;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.home-hero-title {
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: #FFFFFF;
+}
+
+.home-hero-title span {
+  color: var(--color-primary, #9EF01A);
+  text-shadow: 0 0 25px rgba(158, 240, 26, 0.35);
+}
+
+.home-hero-desc {
+  color: var(--text-secondary, #A7ADB4);
+  font-size: 1.1rem;
+  max-width: 620px;
+}
+
+/* 2. Tarjetas de Accesos Rápidos */
+.quick-access-card {
+  background-color: var(--bg-card, #171C20);
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: 14px;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.quick-access-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(158, 240, 26, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  color: inherit;
+}
+
+.quick-access-icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background-color: rgba(158, 240, 26, 0.12);
+  color: var(--color-primary, #9EF01A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* 3. Tarjetas de Ejercicios Destacados */
+.exercise-card {
+  background-color: var(--bg-card, #171C20);
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  height: 100%;
+}
+
+.exercise-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(158, 240, 26, 0.4);
+}
+
+.exercise-img-container {
+  height: 190px;
+  overflow: hidden;
+  background-color: #0D1114;
+}
+
+.exercise-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.exercise-card:hover .exercise-card-img {
+  transform: scale(1.05);
+}
+
+/* 4. Tarjeta «Tu rutina de hoy» */
+.routine-card {
+  background-color: var(--bg-card, #171C20);
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: 16px;
+  height: 100%;
+}
+
+.routine-exercise-item {
+  background-color: var(--bg-sidebar, #0D1114);
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color 0.2s ease;
+}
+
+.routine-exercise-item:hover {
+  border-color: rgba(158, 240, 26, 0.3);
+}
+
+.routine-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary, #9EF01A);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--color-primary, #9EF01A);
+  display: inline-block;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* 5. Sección Motivacional */
+.motivation-card {
+  background-color: var(--bg-card, #171C20);
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: 16px;
+  overflow: hidden;
+  height: 100%;
+}
+
+.motivation-img {
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  max-height: 380px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+
+/* Tarjetas oscuras de la HomePage */
+.card.exercise-card,
+.card.routine-card,
+.card.motivation-card {
+  --bs-card-bg: #171C20;
+  --bs-card-color: #FFFFFF;
+
+  background-color: #171C20;
+  color: #FFFFFF;
+}
+
+/* Etiquetas de las tarjetas */
+.exercise-card .forza-badge-muted,
+.motivation-card .forza-badge-muted {
+  background-color: #242B30;
+  color: #9EF01A;
+  border: 1px solid #414C36;
+}
