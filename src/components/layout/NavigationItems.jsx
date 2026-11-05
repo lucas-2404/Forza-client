@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   HomeIcon,
   DumbbellIcon,
@@ -25,9 +26,27 @@ export const mainNavLinks = [
  * Reutilizable tanto en el Sidebar fijo de escritorio como en el Offcanvas móvil.
  *
  * @param {Function} onItemClick - Callback opcional para cerrar el menú en móviles tras seleccionar una ruta.
- * @param {Function} onLogout - Callback opcional para conectar con el futuro módulo de autenticación.
+ * @param {Function} onLogout - Callback opcional para conectar con el módulo de autenticación.
  */
 function NavigationItems({ onItemClick, onLogout }) {
+  const [usuario, setUsuario] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Actualizar estado de sesión cada vez que cambia la ruta
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem('forza_user');
+    if (usuarioGuardado) {
+      try {
+        setUsuario(JSON.parse(usuarioGuardado));
+      } catch {
+        setUsuario(null);
+      }
+    } else {
+      setUsuario(null);
+    }
+  }, [location]);
+
   const handleClick = () => {
     if (onItemClick) {
       onItemClick();
@@ -36,12 +55,16 @@ function NavigationItems({ onItemClick, onLogout }) {
 
   const handleLogoutClick = (e) => {
     e.preventDefault();
+    localStorage.removeItem('forza_token');
+    localStorage.removeItem('forza_user');
+    setUsuario(null);
     if (onLogout) {
       onLogout();
     }
     if (onItemClick) {
       onItemClick();
     }
+    navigate('/login');
   };
 
   return (
@@ -75,7 +98,7 @@ function NavigationItems({ onItemClick, onLogout }) {
       {/* Separador inferior */}
       <div className="sidebar-divider" role="separator" />
 
-      {/* Navegación Secundaria (Perfil y Cerrar Sesión) */}
+      {/* Navegación Secundaria (Perfil, Login/Registro o Cerrar Sesión) */}
       <div className="sidebar-nav-secondary">
         <ul className="sidebar-nav-list">
           <li className="sidebar-nav-item">
@@ -93,19 +116,49 @@ function NavigationItems({ onItemClick, onLogout }) {
             </NavLink>
           </li>
 
-          <li className="sidebar-nav-item">
-            <button
-              type="button"
-              className="sidebar-link sidebar-logout-btn"
-              onClick={handleLogoutClick}
-              aria-label="Cerrar sesión"
-            >
-              <span className="sidebar-link-icon">
-                <LogoutIcon size={20} />
-              </span>
-              <span className="sidebar-link-text">Cerrar sesión</span>
-            </button>
-          </li>
+          {usuario ? (
+            <li className="sidebar-nav-item">
+              <button
+                type="button"
+                className="sidebar-link sidebar-logout-btn"
+                onClick={handleLogoutClick}
+                aria-label="Cerrar sesión"
+              >
+                <span className="sidebar-link-icon">
+                  <LogoutIcon size={20} />
+                </span>
+                <span className="sidebar-link-text">Cerrar sesión</span>
+              </button>
+            </li>
+          ) : (
+            <>
+              <li className="sidebar-nav-item">
+                <NavLink
+                  to="/login"
+                  className={({ isActive }) =>
+                    isActive ? 'sidebar-link active' : 'sidebar-link'
+                  }
+                  onClick={handleClick}
+                >
+                  <span className="sidebar-link-icon">🔐</span>
+                  <span className="sidebar-link-text">Iniciar sesión</span>
+                </NavLink>
+              </li>
+
+              <li className="sidebar-nav-item">
+                <NavLink
+                  to="/registro"
+                  className={({ isActive }) =>
+                    isActive ? 'sidebar-link active' : 'sidebar-link'
+                  }
+                  onClick={handleClick}
+                >
+                  <span className="sidebar-link-icon">⚡</span>
+                  <span className="sidebar-link-text">Registrarse</span>
+                </NavLink>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </div>
