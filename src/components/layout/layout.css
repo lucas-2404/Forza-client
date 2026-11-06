@@ -1,48 +1,22 @@
 /* ==========================================================================
    FORZA - ESTILOS ESPECÍFICOS DE LAYOUT Y NAVEGACIÓN (Diseño B)
-   Sidebar Lateral + Topbar Superior
+   Refactorizado: 90 % Bootstrap / 10 % CSS Personalizado
+   Sin media queries de pantalla (reemplazadas por utilidades nativas de Bootstrap)
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   1. Contenedor General del Layout (Dashboard)
-   -------------------------------------------------------------------------- */
-
+/* 1. Contenedor General del Layout y Área de Contenido */
 .forza-dashboard-layout {
-  display: flex;
-  min-height: 100vh;
   background-color: var(--bg-main, #080B0D);
   color: var(--text-primary, #FFFFFF);
-  width: 100%;
-  overflow-x: hidden;
 }
 
-/* Área principal (Topbar + Contenido + Footer) */
-.forza-main-wrapper {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0; /* Evita desbordamiento flex */
-  min-height: 100vh;
-}
-
-.forza-content-area {
-  flex: 1;
-  padding: 2rem 1.5rem;
-  width: 100%;
-}
-
-/* --------------------------------------------------------------------------
-   2. Sidebar Lateral (Escritorio)
-   -------------------------------------------------------------------------- */
-
+/* 2. Sidebar Lateral (Escritorio) */
 .forza-sidebar {
   width: 260px;
   min-width: 260px;
   height: 100vh;
   background-color: var(--bg-sidebar, #0D1114);
   border-right: 1px solid var(--border-color, #2A3035);
-  display: flex;
-  flex-direction: column;
   position: sticky;
   top: 0;
   z-index: 1020;
@@ -60,110 +34,38 @@
   border-radius: 4px;
 }
 
-/* Encabezado del Sidebar (Logo FORZA) */
 .sidebar-header {
   height: 72px;
-  display: flex;
-  align-items: center;
-  padding: 0 1.5rem;
-  border-bottom: 1px solid var(--border-color, #2A3035);
   flex-shrink: 0;
 }
 
-.sidebar-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  text-decoration: none;
-  color: #FFFFFF;
-  transition: opacity 0.2s ease;
-}
-
-.sidebar-brand:hover {
-  color: #FFFFFF;
-  opacity: 0.9;
-}
-
 .sidebar-brand-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   color: var(--color-primary, #9EF01A);
   filter: drop-shadow(0 0 10px rgba(158, 240, 26, 0.35));
 }
 
 .sidebar-brand-text {
-  font-size: 1.5rem;
-  font-weight: 900;
   letter-spacing: 1.5px;
-  color: #FFFFFF;
 }
 
-/* Contenedor de Navegación */
-.sidebar-nav-container {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 1.25rem 0.85rem;
-  justify-content: space-between;
-}
-
-.sidebar-nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.sidebar-nav-item {
-  width: 100%;
-}
-
-/* Enlaces de Navegación del Sidebar */
+/* Enlaces del Sidebar y Estados Activos */
 .sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
   color: var(--text-secondary, #A7ADB4);
   font-size: 0.95rem;
   font-weight: 500;
-  text-decoration: none;
-  background-color: transparent;
-  border: none;
-  width: 100%;
-  cursor: pointer;
-  text-align: left;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.sidebar-link-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.sidebar-link-text {
-  flex: 1;
-}
-
-/* Hover en enlace inactivo */
 .sidebar-link:hover:not(.active) {
   background-color: rgba(255, 255, 255, 0.05);
   color: #FFFFFF;
   transform: translateX(3px);
 }
 
-.sidebar-link:hover:not(.active) .sidebar-link-icon {
+.sidebar-link:hover:not(.active) span:first-child {
   color: var(--color-primary, #9EF01A);
 }
 
-/* Estado Activo del Sidebar (Fondo verde lima, texto e icono oscuros) */
 .sidebar-link.active {
   background-color: var(--color-primary, #9EF01A) !important;
   color: #080B0D !important;
@@ -171,19 +73,8 @@
   box-shadow: 0 4px 16px rgba(158, 240, 26, 0.3);
 }
 
-.sidebar-link.active .sidebar-link-icon {
+.sidebar-link.active span:first-child {
   color: #080B0D !important;
-}
-
-/* Separador y parte inferior */
-.sidebar-divider {
-  height: 1px;
-  background-color: var(--border-color, #2A3035);
-  margin: 1.25rem 0.5rem;
-}
-
-.sidebar-logout-btn {
-  color: var(--text-secondary, #A7ADB4);
 }
 
 .sidebar-logout-btn:hover {
@@ -191,56 +82,20 @@
   color: #ef4444 !important;
 }
 
-.sidebar-logout-btn:hover .sidebar-link-icon {
-  color: #ef4444 !important;
-}
-
-/* --------------------------------------------------------------------------
-   3. Topbar Superior
-   -------------------------------------------------------------------------- */
-
+/* 3. Topbar Superior */
 .forza-topbar {
   height: 72px;
   background-color: var(--bg-topbar, #14191D);
-  border-bottom: 1px solid var(--border-color, #2A3035);
-  position: sticky;
-  top: 0;
   z-index: 1010;
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
 }
 
-.topbar-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  gap: 1rem;
-}
-
-.topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex: 1;
-  max-width: 450px;
-}
-
-/* Botón hamburguesa para móvil */
 .topbar-menu-toggle {
-  background: transparent;
-  border: 1px solid var(--border-color, #2A3035);
-  border-radius: 8px;
-  color: var(--text-primary, #FFFFFF);
   width: 40px;
   height: 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid var(--border-color, #2A3035);
+  color: var(--text-primary, #FFFFFF);
+  border-radius: 8px;
   transition: all 0.2s ease;
 }
 
@@ -250,49 +105,10 @@
   color: var(--color-primary, #9EF01A);
 }
 
-/* Logotipo móvil en Topbar */
-.topbar-mobile-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: #FFFFFF;
-  font-weight: 800;
-  font-size: 1.25rem;
-}
-
-.topbar-mobile-brand .brand-icon {
-  color: var(--color-primary, #9EF01A);
-  display: flex;
-}
-
-/* Formulario e input de Búsqueda Visual */
-.topbar-search-form {
-  position: relative;
-  width: 100%;
-  max-width: 360px;
-}
-
-.topbar-search-form .search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-secondary, #A7ADB4);
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-}
-
 .topbar-search-input {
-  width: 100%;
   height: 42px;
   background-color: var(--bg-sidebar, #0D1114);
   border: 1px solid var(--border-color, #2A3035);
-  border-radius: 9999px;
-  padding: 0 1rem 0 2.6rem;
-  color: #FFFFFF;
-  font-size: 0.9rem;
   outline: none;
   transition: all 0.2s ease;
 }
@@ -307,28 +123,13 @@
   box-shadow: 0 0 0 3px rgba(158, 240, 26, 0.15);
 }
 
-/* Lado Derecho de la Topbar */
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Botón de Notificaciones con indicador verde */
 .topbar-icon-btn {
-  position: relative;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
   background-color: var(--bg-card, #171C20);
   border: 1px solid var(--border-color, #2A3035);
   color: var(--text-secondary, #A7ADB4);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
   transition: all 0.2s ease;
-  padding: 0;
 }
 
 .topbar-icon-btn:hover {
@@ -338,29 +139,19 @@
 }
 
 .notif-indicator {
-  position: absolute;
   top: 9px;
   right: 9px;
   width: 8px;
   height: 8px;
   background-color: var(--color-primary, #9EF01A);
-  border-radius: 50%;
   box-shadow: 0 0 8px var(--color-primary, #9EF01A);
 }
 
-/* Avatar del Usuario */
 .topbar-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
   background-color: var(--bg-card, #171C20);
   border: 1.5px solid var(--color-primary, #9EF01A);
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85rem;
-  font-weight: 700;
   transition: all 0.2s ease;
 }
 
@@ -368,24 +159,17 @@
   box-shadow: 0 0 12px rgba(158, 240, 26, 0.35);
 }
 
-/* Dropdown del perfil */
 .topbar-user-dropdown .dropdown-toggle::after {
-  display: none; /* Oculta la flecha por defecto de Bootstrap para un look más moderno */
+  display: none;
 }
 
 .topbar-dropdown-menu {
   background-color: var(--bg-card, #171C20) !important;
-  border: 1px solid var(--border-color, #2A3035) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
-  padding: 0.5rem 0 !important;
   min-width: 210px !important;
-  margin-top: 0.5rem !important;
 }
 
 .dropdown-item-forza {
   color: var(--text-secondary, #A7ADB4) !important;
-  padding: 0.6rem 1.25rem !important;
   font-size: 0.9rem !important;
   transition: all 0.2s ease !important;
 }
@@ -395,81 +179,24 @@
   color: #FFFFFF !important;
 }
 
-/* --------------------------------------------------------------------------
-   4. Offcanvas Móvil (Sidebar desplegable en pantallas pequeñas)
-   -------------------------------------------------------------------------- */
-
+/* 4. Offcanvas Móvil */
 .forza-offcanvas {
   background-color: var(--bg-sidebar, #0D1114) !important;
   border-right: 1px solid var(--border-color, #2A3035) !important;
-  color: #FFFFFF !important;
   width: 280px !important;
   max-width: 85vw !important;
 }
 
-.forza-offcanvas .offcanvas-header {
-  border-bottom: 1px solid var(--border-color, #2A3035);
-  padding: 1.25rem 1.5rem;
-}
-
-.forza-offcanvas .offcanvas-body {
-  padding: 0;
-  overflow-y: auto;
-}
-
-/* --------------------------------------------------------------------------
-   5. Footer del Layout
-   -------------------------------------------------------------------------- */
-
+/* 5. Footer del Layout */
 .forza-layout-footer {
   background-color: var(--bg-sidebar, #0D1114);
-  border-top: 1px solid var(--border-color, #2A3035);
-  padding: 1.5rem 0;
-  margin-top: auto;
-  color: var(--text-secondary, #A7ADB4);
-  font-size: 0.85rem;
-}
-
-.forza-layout-footer a {
-  color: var(--text-secondary, #A7ADB4);
-  text-decoration: none;
 }
 
 .forza-layout-footer a:hover {
-  color: var(--color-primary, #9EF01A);
+  color: var(--color-primary, #9EF01A) !important;
 }
 
-/* --------------------------------------------------------------------------
-   6. Adaptación Responsive
-   -------------------------------------------------------------------------- */
-
-/* En dispositivos móviles y tablets (<992px) */
-@media (max-width: 991.98px) {
-  .forza-sidebar.desktop-only {
-    display: none !important;
-  }
-
-  .forza-content-area {
-    padding: 1.25rem 1rem;
-  }
-
-  .topbar-search-form {
-    max-width: 220px;
-  }
-}
-
-/* En pantallas muy pequeñas (<576px) */
-@media (max-width: 575.98px) {
-  .topbar-search-form {
-    display: none; /* Oculta el buscador en celulares muy estrechos para dar espacio a avatar y notificaciones */
-  }
-
-  .forza-topbar {
-    padding: 0 1rem;
-  }
-}
-
-/* Accesibilidad: respeta prefers-reduced-motion */
+/* 6. Accesibilidad (preferencia del sistema de reducción de movimiento) */
 @media (prefers-reduced-motion: reduce) {
   .sidebar-link,
   .topbar-menu-toggle,
@@ -480,4 +207,3 @@
     transform: none !important;
   }
 }
-

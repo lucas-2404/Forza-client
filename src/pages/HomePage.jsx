@@ -6,17 +6,13 @@ import './HomePage.css';
 /**
  * PÁGINA DE INICIO (HomePage) — DISEÑO 1 DE FORZA
  *
- * Estructura de la página:
- * 1. Hero Principal: Título destacado, descripción, botones de acción e imagen de fondo.
- * 2. Accesos Rápidos: 4 tarjetas interactivas que enlazan a las secciones principales.
- * 3. Ejercicios Destacados: 4 tarjetas con imágenes deportivas reales y grupo muscular.
- * 4. Tu Rutina de Hoy: Tarjeta de rutina sugerida de cuerpo completo.
- * 5. Sección Motivacional: Imagen inspiradora de alta calidad y frase de disciplina.
- *
- * Tecnologías: React, React Bootstrap (80%), CSS Personalizado (20%) y React Router.
+ * Refactorizada al 90 % Bootstrap / 10 % CSS:
+ * - Toda la grilla, espaciados, paddings y flexbox utilizan utilidades nativas de Bootstrap.
+ * - Tarjetas, botones y badges usan componentes de React Bootstrap.
+ * - Solo 50 líneas de CSS personalizado reservadas para fondos e interacciones visuales.
  */
 function HomePage() {
-  // Arreglo con los 4 accesos rápidos principales de la aplicación
+  // Arreglo de accesos rápidos
   const accesosRapidos = [
     {
       id: 1,
@@ -48,7 +44,7 @@ function HomePage() {
     },
   ];
 
-  // Arreglo con los 4 ejercicios destacados (imágenes locales en public/img)
+  // Arreglo de ejercicios destacados
   const ejerciciosDestacados = [
     {
       id: 1,
@@ -80,7 +76,7 @@ function HomePage() {
     },
   ];
 
-  // Lista de ejercicios para la rutina sugerida de hoy
+  // Lista de ejercicios de la rutina sugerida
   const ejerciciosRutinaHoy = [
     { id: 1, nombre: 'Sentadillas', series: '4 series × 8-10 reps', grupo: 'Piernas' },
     { id: 2, nombre: 'Press de banca', series: '4 series × 8 reps', grupo: 'Pecho' },
@@ -91,15 +87,15 @@ function HomePage() {
   return (
     <Container fluid className="px-0">
       {/* ====================================================================
-          A. HERO PRINCIPAL
+          A. HERO PRINCIPAL (90% Bootstrap)
           ==================================================================== */}
-      <section className="home-hero p-4 p-md-5 mb-5" aria-label="Sección de bienvenida">
+      <section className="home-hero p-4 p-md-5 mb-4 mb-md-5 rounded-4 border border-secondary shadow-lg d-flex align-items-center" aria-label="Sección de bienvenida">
         <div className="py-2 py-md-3">
           <Badge className="forza-badge mb-3">Tu centro de entrenamiento</Badge>
-          <h1 className="home-hero-title mb-3">
-            Tu progreso <span>comienza aquí</span>
+          <h1 className="display-5 fw-bold text-white mb-3">
+            Tu progreso <span className="text-lime-glow">comienza aquí</span>
           </h1>
-          <p className="home-hero-desc mb-4">
+          <p className="lead text-secondary mb-4" style={{ maxWidth: '620px' }}>
             Explorá ejercicios, organizá tus rutinas y llevá tus entrenamientos al siguiente nivel con FORZA.
           </p>
           <div className="d-flex flex-wrap gap-3">
@@ -114,23 +110,27 @@ function HomePage() {
       </section>
 
       {/* ====================================================================
-          B. ACCESOS RÁPIDOS (4 Tarjetas mapeadas dinámicamente)
+          B. ACCESOS RÁPIDOS (Grilla y Tarjetas Bootstrap)
           ==================================================================== */}
-      <section className="mb-5" aria-label="Accesos rápidos">
+      <section className="mb-4 mb-md-5" aria-label="Accesos rápidos">
         <Row className="g-3 g-md-4">
           {accesosRapidos.map((acceso) => {
             const Icono = acceso.icono;
             return (
               <Col xs={12} sm={6} lg={3} key={acceso.id}>
-                <Link to={acceso.ruta} className="quick-access-card p-3 p-md-4 h-100">
+                <Card
+                  as={Link}
+                  to={acceso.ruta}
+                  className="quick-access-card p-3 p-md-4 h-100 rounded-3 border-secondary text-white text-decoration-none shadow-sm"
+                >
                   <div className="d-flex align-items-center gap-3 mb-2">
-                    <div className="quick-access-icon-box" aria-hidden="true">
+                    <div className="quick-access-icon-box rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" aria-hidden="true">
                       <Icono size={22} />
                     </div>
                     <h2 className="h6 fw-bold text-white mb-0">{acceso.titulo}</h2>
                   </div>
                   <p className="text-secondary small mb-0">{acceso.descripcion}</p>
-                </Link>
+                </Card>
               </Col>
             );
           })}
@@ -138,9 +138,9 @@ function HomePage() {
       </section>
 
       {/* ====================================================================
-          C. EJERCICIOS DESTACADOS (4 Tarjetas con imágenes locales)
+          C. EJERCICIOS DESTACADOS (Bootstrap Card y utilidades)
           ==================================================================== */}
-      <section className="mb-5" aria-label="Ejercicios destacados">
+      <section className="mb-4 mb-md-5" aria-label="Ejercicios destacados">
         <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
           <div>
             <h2 className="h4 fw-bold text-white mb-1">Ejercicios destacados</h2>
@@ -153,15 +153,16 @@ function HomePage() {
           </Button>
         </div>
 
-        <Row className="g-4">
+        <Row className="g-3 g-md-4">
           {ejerciciosDestacados.map((ejercicio) => (
             <Col xs={12} sm={6} lg={3} key={ejercicio.id}>
-              <Card className="exercise-card">
-                <div className="exercise-img-container">
-                  <img
+              <Card className="exercise-card h-100 rounded-3 border-secondary text-white overflow-hidden shadow-sm">
+                <div className="overflow-hidden bg-black" style={{ height: '190px' }}>
+                  <Card.Img
+                    variant="top"
                     src={ejercicio.imagen}
                     alt={ejercicio.alt}
-                    className="exercise-card-img"
+                    className="exercise-card-img w-100 h-100 object-fit-cover"
                     loading="lazy"
                   />
                 </div>
@@ -183,13 +184,16 @@ function HomePage() {
       </section>
 
       {/* ====================================================================
-          D. TU RUTINA DE HOY Y E. SECCIÓN MOTIVACIONAL (Distribución equilibrada)
+          D. TU RUTINA DE HOY Y E. SECCIÓN MOTIVACIONAL (Flexbox y Grilla)
           ==================================================================== */}
-      <section className="mb-4" aria-label="Rutina sugerida y motivación">
+      <section className="mb-3" aria-label="Rutina sugerida y motivación">
         <Row className="g-4 align-items-stretch">
           {/* D. SECCIÓN: TU RUTINA DE HOY */}
           <Col xs={12} lg={6}>
-            <Card className="routine-card p-4 h-100 d-flex flex-column justify-content-between">
+            <Card
+              className="h-100 p-4 rounded-4 border-secondary text-white d-flex flex-column justify-content-between shadow-sm"
+              style={{ backgroundColor: 'var(--bg-card, #171C20)' }}
+            >
               <div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h2 className="h4 fw-bold text-white mb-0">Tu rutina de hoy</h2>
@@ -205,12 +209,16 @@ function HomePage() {
                   </p>
                 </div>
 
-                {/* Lista de ejercicios sugeridos */}
+                {/* Lista de ejercicios con utilidades flex nativas */}
                 <div className="d-flex flex-column gap-2 mb-4">
                   {ejerciciosRutinaHoy.map((item) => (
-                    <div key={item.id} className="routine-exercise-item">
+                    <div
+                      key={item.id}
+                      className="d-flex align-items-center justify-content-between p-2 px-3 rounded-2 border border-secondary"
+                      style={{ backgroundColor: 'var(--bg-sidebar, #0D1114)' }}
+                    >
                       <div className="d-flex align-items-center">
-                        <span className="routine-bullet" aria-hidden="true" />
+                        <span className="routine-bullet rounded-circle me-2 d-inline-block flex-shrink-0" aria-hidden="true" />
                         <span className="fw-semibold text-white">{item.nombre}</span>
                       </div>
                       <span className="small text-secondary">{item.series}</span>
@@ -229,7 +237,10 @@ function HomePage() {
 
           {/* E. SECCIÓN MOTIVACIONAL */}
           <Col xs={12} lg={6}>
-            <Card className="motivation-card p-4 h-100 d-flex flex-column justify-content-between">
+            <Card
+              className="h-100 p-4 rounded-4 border-secondary text-white d-flex flex-column justify-content-between shadow-sm"
+              style={{ backgroundColor: 'var(--bg-card, #171C20)' }}
+            >
               <div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h2 className="h4 fw-bold text-white mb-0">Motivación diaria</h2>
@@ -240,12 +251,13 @@ function HomePage() {
                   La constancia y el esfuerzo diario construyen los resultados que buscas.
                 </p>
 
-                {/* Imagen Motivacional local (public/img/motivacion.webp) */}
-                <div className="motivation-img-box mb-3">
+                {/* Imagen Motivacional local con utilidades Bootstrap */}
+                <div className="rounded-3 overflow-hidden mb-3">
                   <img
                     src="/img/motivacion.webp"
                     alt="Atleta en el gimnasio superando sus límites - Mentalidad FORZA"
-                    className="motivation-img"
+                    className="img-fluid rounded-3 w-100 object-fit-cover"
+                    style={{ minHeight: '220px', maxHeight: '340px' }}
                     loading="lazy"
                   />
                 </div>
