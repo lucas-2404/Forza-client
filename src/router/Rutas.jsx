@@ -10,6 +10,7 @@ import EjerciciosPage from '../pages/EjerciciosPage';
 import RutinaPage from '../pages/RutinaPage';
 import PerfilPage from '../pages/PerfilPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import FavoritosPage from '../pages/FavoritosPage';
 
 /**
  * Definición centralizada de las Rutas de FORZA.
@@ -34,22 +35,7 @@ function Rutas() {
         <Route path="progreso" element={<DashboardPage />} />
 
         {/* 5. Favoritos (Destino preparado visualmente sin funcionalidad invasiva) */}
-        <Route
-          path="favoritos"
-          element={
-            <div className="container py-4 text-center">
-              <div className="forza-placeholder-card">
-                <h1>❤️ Ejercicios y Rutinas Favoritas</h1>
-                <p className="text-secondary">
-                  Esta sección está reservada para el almacenamiento de favoritos.
-                </p>
-                <div className="team-note mx-auto" style={{ maxWidth: '550px' }}>
-                  <strong>Nota para el equipo:</strong> Módulo de Favoritos preparado para recibir la lógica correspondiente.
-                </div>
-              </div>
-            </div>
-          }
-        />
+        <Route path="favoritos" element={<FavoritosPage />} />
 
         {/* Mi Perfil */}
         <Route path="perfil" element={<PerfilPage />} />

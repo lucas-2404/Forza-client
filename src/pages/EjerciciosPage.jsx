@@ -1,116 +1,138 @@
-import { useState } from 'react';
-import { Container, Row, Col, Card, Badge, Dropdown, Button } from 'react-bootstrap';
-import { ejerciciosIniciales } from '../data/ejercicios';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Container, Row, Col, Spinner, Alert, Button } from 'react-bootstrap';
+import { EjercicioCard, EjercicioFiltros } from '../components/ejercicios';
+import { getEjercicios } from '../services/ejerciciosService';
+import { useFavoritos } from '../hooks/useFavoritos';
 
 /**
- * Página de Catálogo de Ejercicios adaptada con React Bootstrap.
- * Utiliza: Container, Row, Col, Card, Badge, Dropdown y Button de react-bootstrap.
+ * Catálogo de ejercicios con búsqueda, filtros y favoritos.
+ * Los filtros se guardan en la URL (?q=&grupo=&dificultad=&favoritos=1),
+ * así se mantienen al recargar o al compartir el link.
  */
 function EjerciciosPage() {
-  const [filtroGrupo, setFiltroGrupo] = useState('Todos');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filtros = {
+    q: searchParams.get('q') ?? '',
+    grupo: searchParams.get('grupo') ?? '',
+    dificultad: searchParams.get('dificultad') ?? '',
+    favoritos: searchParams.get('favoritos') === '1',
+  };
 
-  // Filtrar ejercicios según el grupo muscular seleccionado
-  const ejerciciosFiltrados = filtroGrupo === 'Todos'
-    ? ejerciciosIniciales
-    : ejerciciosIniciales.filter((e) => e.grupoMuscular.toLowerCase().includes(filtroGrupo.toLowerCase()));
+  const [ejercicios, setEjercicios] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  const [busqueda, setBusqueda] = useState(filtros.q);
+  const { esFavorito, toggleFavorito } = useFavoritos();
+
+  // Espera 300 ms después de la última tecla antes de buscar
+  useEffect(() => {
+    const timer = setTimeout(() => setBusqueda(filtros.q), 300);
+    return () => clearTimeout(timer);
+  }, [filtros.q]);
+
+  useEffect(() => {
+    let cancelado = false;
+    setCargando(true);
+    setError(null);
+
+    getEjercicios({ q: busqueda, grupo: filtros.grupo, dificultad: filtros.dificultad })
+      .then((data) => {
+        if (!cancelado) setEjercicios(data);
+      })
+      .catch(() => {
+        if (!cancelado) setError('No se pudieron cargar los ejercicios. Revisá tu conexión e intentá de nuevo.');
+      })
+      .finally(() => {
+        if (!cancelado) setCargando(false);
+      });
+
+    return () => {
+      cancelado = true;
+    };
+  }, [busqueda, filtros.grupo, filtros.dificultad]);
+
+  const actualizarFiltro = (clave, valor) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (valor) next.set(clave, valor);
+        else next.delete(clave);
+        return next;
+      },
+      { replace: true }
+    );
+  };
+
+  const limpiarFiltros = () => setSearchParams({}, { replace: true });
+
+  const hayFiltrosActivos = Boolean(
+    filtros.q || filtros.grupo || filtros.dificultad || filtros.favoritos
+  );
+
+  const visibles = filtros.favoritos
+    ? ejercicios.filter((e) => esFavorito(e.id))
+    : ejercicios;
 
   return (
     <Container className="py-2">
-      {/* Encabezado y filtro con Dropdown de React Bootstrap */}
-      <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-        <div>
-          <h1 className="h3 fw-bold text-light mb-1">Biblioteca de Ejercicios</h1>
-          <p className="text-secondary mb-0">
-            Explora el catálogo clasificado por grupo muscular y nivel de dificultad.
-          </p>
+      <div className="mb-4">
+        <h1 className="h3 fw-bold text-light mb-1">Biblioteca de Ejercicios</h1>
+        <p className="text-secondary mb-0">
+          Buscá ejercicios por nombre, grupo muscular o dificultad, y guardá tus favoritos.
+        </p>
+      </div>
+
+      <EjercicioFiltros
+        filtros={filtros}
+        onChange={actualizarFiltro}
+        onLimpiar={limpiarFiltros}
+        hayFiltrosActivos={hayFiltrosActivos}
+      />
+
+      {cargando && (
+        <div className="text-center py-5">
+          <Spinner animation="border" variant="light" role="status">
+            <span className="visually-hidden">Cargando ejercicios...</span>
+          </Spinner>
         </div>
+      )}
 
-        {/* Dropdown de React Bootstrap para filtrar */}
-        <Dropdown>
-          <Dropdown.Toggle className="forza-btn-outline btn-sm">
-            Filtrar: {filtroGrupo}
-          </Dropdown.Toggle>
+      {!cargando && error && <Alert variant="danger">{error}</Alert>}
 
-          <Dropdown.Menu className="bg-dark border-secondary">
-            <Dropdown.Item 
-              onClick={() => setFiltroGrupo('Todos')}
-              className="text-light"
-            >
-              Todos los grupos
-            </Dropdown.Item>
-            <Dropdown.Item 
-              onClick={() => setFiltroGrupo('Pecho')}
-              className="text-light"
-            >
-              Pecho
-            </Dropdown.Item>
-            <Dropdown.Item 
-              onClick={() => setFiltroGrupo('Espalda')}
-              className="text-light"
-            >
-              Espalda
-            </Dropdown.Item>
-            <Dropdown.Item 
-              onClick={() => setFiltroGrupo('Piernas')}
-              className="text-light"
-            >
-              Piernas
-            </Dropdown.Item>
-            <Dropdown.Item 
-              onClick={() => setFiltroGrupo('Hombros')}
-              className="text-light"
-            >
-              Hombros
-            </Dropdown.Item>
-            <Dropdown.Item 
-              onClick={() => setFiltroGrupo('Core')}
-              className="text-light"
-            >
-              Core / Abdomen
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+      {!cargando && !error && visibles.length === 0 && (
+        <div className="text-center py-5">
+          <p className="text-light mb-2">
+            {filtros.favoritos && !filtros.q && !filtros.grupo && !filtros.dificultad
+              ? 'Todavía no marcaste ningún ejercicio como favorito.'
+              : 'No hay ejercicios que coincidan con estos filtros.'}
+          </p>
+          {hayFiltrosActivos && (
+            <Button className="forza-btn-outline btn-sm" onClick={limpiarFiltros}>
+              Ver todos los ejercicios
+            </Button>
+          )}
+        </div>
+      )}
 
-      {/* Grid de ejercicios con Row y Col */}
-      <Row className="g-4">
-        {ejerciciosFiltrados.map((ejercicio) => (
-          <Col md={6} lg={4} key={ejercicio.id}>
-            <Card className="forza-card">
-              <Card.Body>
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                  <span className="fs-2">{ejercicio.icono}</span>
-                  <Badge className="forza-badge">{ejercicio.grupoMuscular}</Badge>
-                </div>
-
-                <Card.Title className="h5 fw-bold">{ejercicio.nombre}</Card.Title>
-                <Card.Text className="small mb-3">
-                  {ejercicio.descripcion}
-                </Card.Text>
-
-                <div className="border-top border-secondary pt-3 small text-secondary">
-                  <div className="d-flex justify-content-between mb-1">
-                    <span>Dificultad:</span>
-                    <strong className="text-light">{ejercicio.dificultad}</strong>
-                  </div>
-                  <div className="d-flex justify-content-between mb-1">
-                    <span>Series recomendadas:</span>
-                    <strong className="text-light">{ejercicio.seriesRecomendadas}</strong>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <span>Repeticiones:</span>
-                    <strong className="text-light">{ejercicio.repeticionesRecomendadas}</strong>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-
-      <div className="team-note mt-5">
-        <strong>Nota para el equipo:</strong> Módulo de Ejercicios. El integrante a cargo puede conectar un buscador en tiempo real, modal para agregar ejercicios y conexión con la API en <code>src/services/api.js</code>.
-      </div>
+      {!cargando && !error && visibles.length > 0 && (
+        <>
+          <p className="small text-secondary mb-3">
+            {visibles.length} {visibles.length === 1 ? 'ejercicio' : 'ejercicios'}
+          </p>
+          <Row className="g-4">
+            {visibles.map((ejercicio) => (
+              <Col md={6} lg={4} key={ejercicio.id}>
+                <EjercicioCard
+                  ejercicio={ejercicio}
+                  esFavorito={esFavorito(ejercicio.id)}
+                  onToggleFavorito={toggleFavorito}
+                />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
     </Container>
   );
 }
