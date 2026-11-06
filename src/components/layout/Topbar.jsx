@@ -1,143 +1,196 @@
-import { useState } from 'react';
-import { Dropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { SearchIcon, BellIcon, MenuIcon, UserIcon, DumbbellIcon } from './Icons';
 
-/**
- * Componente Topbar Superior (Diseño B de FORZA).
- *
- * Refactorizado al 90 % Bootstrap:
- * - Visibilidad de búsqueda con `d-none d-sm-flex` (reemplaza media query <576px).
- * - Espaciado responsive con `px-3 px-lg-4` (reemplaza media query de padding).
- * - Grilla y alineación nativa con `d-flex align-items-center justify-content-between gap-3`.
- * - Botones y desplegable basados en componentes y utilidades de Bootstrap.
- */
-function Topbar({
-  onToggleMobileMenu,
-  searchValue = '',
-  onSearchChange,
-  onSearchSubmit,
-  onLogout,
-}) {
-  const [internalSearch, setInternalSearch] = useState(searchValue);
+import { useState, useEffect } from 'react';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import {
+  HomeIcon,
+  DumbbellIcon,
+  CalendarIcon,
+  ChartIcon,
+  HeartIcon,
+  UserIcon,
+  LogoutIcon,
+} from './Icons';
 
-  const handleInputChange = (e) => {
-    setInternalSearch(e.target.value);
-    if (onSearchChange) {
-      onSearchChange(e.target.value);
+// Enlaces principales del Sidebar
+export const mainNavLinks = [
+  { name: 'Inicio', path: '/', icon: HomeIcon, end: true },
+  { name: 'Ejercicios', path: '/ejercicios', icon: DumbbellIcon },
+  { name: 'Rutinas', path: '/rutinas', icon: CalendarIcon },
+  { name: 'Progreso', path: '/dashboard', icon: ChartIcon },
+  { name: 'Favoritos', path: '/favoritos', icon: HeartIcon },
+];
+
+// Clases Bootstrap reutilizadas para los enlaces
+const clasesEnlace =
+  'sidebar-link d-flex align-items-center gap-3 p-2 px-3 rounded-3 text-decoration-none w-100';
+
+function NavigationItems({ onItemClick, onLogout }) {
+  const [usuario, setUsuario] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Actualizar usuario al cambiar de ruta
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem('forza_user');
+
+    if (usuarioGuardado) {
+      try {
+        setUsuario(JSON.parse(usuarioGuardado));
+      } catch {
+        setUsuario(null);
+      }
+    } else {
+      setUsuario(null);
+    }
+  }, [location]);
+
+  // Cerrar el menú lateral en dispositivos móviles
+  const handleClick = () => {
+    if (onItemClick) {
+      onItemClick();
     }
   };
 
-  const handleFormSubmit = (e) => {
+  // Cerrar sesión y regresar al Login
+  const handleLogoutClick = (e) => {
     e.preventDefault();
-    if (onSearchSubmit) {
-      onSearchSubmit(internalSearch);
+
+    localStorage.removeItem('forza_token');
+    localStorage.removeItem('forza_user');
+    setUsuario(null);
+
+    if (onLogout) {
+      onLogout();
     }
+
+    if (onItemClick) {
+      onItemClick();
+    }
+
+    navigate('/login');
   };
+
+  // Aplicar la clase active cuando estamos en la ruta
+  const obtenerClaseEnlace = ({ isActive }) =>
+    isActive ? `${clasesEnlace} active` : clasesEnlace;
 
   return (
-    <header className="forza-topbar px-3 px-lg-4 d-flex align-items-center sticky-top border-bottom border-secondary">
-      <div className="d-flex align-items-center justify-content-between w-100 gap-2 gap-md-3">
-        {/* Lado Izquierdo: Botón Menú Móvil + Logo Móvil + Buscador */}
-        <div className="d-flex align-items-center gap-2 gap-md-3 flex-grow-1" style={{ maxWidth: '460px' }}>
-          {/* Botón hamburguesa visible solo en pantallas <992px */}
-          <button
-            type="button"
-            className="topbar-menu-toggle d-lg-none d-inline-flex align-items-center justify-content-center"
-            onClick={onToggleMobileMenu}
-            aria-label="Abrir menú de navegación"
-          >
-            <MenuIcon size={24} />
-          </button>
+    <div className="d-flex flex-column flex-grow-1 justify-content-between p-3">
 
-          {/* Logotipo móvil visible solo en pantallas <992px */}
-          <div className="d-lg-none">
-            <Link to="/" className="d-inline-flex align-items-center gap-2 text-decoration-none text-white fw-bold fs-5">
-              <span className="d-flex" style={{ color: 'var(--color-primary, #9EF01A)' }}>
-                <DumbbellIcon size={22} />
-              </span>
-              <span>FORZA</span>
-            </Link>
-          </div>
+      {/* Navegación principal */}
+      <nav aria-label="Navegación principal">
+        <ul className="list-unstyled m-0 p-0 d-flex flex-column gap-1">
+          {mainNavLinks.map((item) => {
+            const IconComponent = item.icon;
 
-          {/* Campo de búsqueda visual: d-none en <576px, d-sm-flex desde 576px */}
-          <form
-            className="position-relative d-none d-sm-flex align-items-center w-100"
-            style={{ maxWidth: '360px' }}
-            onSubmit={handleFormSubmit}
-          >
-            <span className="position-absolute start-0 ms-3 text-secondary d-flex align-items-center pe-none" aria-hidden="true">
-              <SearchIcon size={17} />
-            </span>
-            <input
-              type="text"
-              className="topbar-search-input w-100 rounded-pill text-white ps-5 pe-3"
-              placeholder="Buscar ejercicios, rutinas..."
-              value={internalSearch}
-              onChange={handleInputChange}
-              aria-label="Buscar ejercicios o rutinas"
-            />
-          </form>
-        </div>
+            return (
+              <li key={item.path} className="w-100">
+                <NavLink
+                  to={item.path}
+                  end={item.end}
+                  className={obtenerClaseEnlace}
+                  onClick={handleClick}
+                >
+                  <span
+                    className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
+                    aria-hidden="true"
+                  >
+                    <IconComponent size={20} />
+                  </span>
 
-        {/* Lado Derecho: Notificaciones + Avatar del Perfil */}
-        <div className="d-flex align-items-center gap-2 gap-md-3">
-          {/* Botón visual de Notificaciones */}
-          <button
-            type="button"
-            className="topbar-icon-btn position-relative d-inline-flex align-items-center justify-content-center rounded-circle"
-            aria-label="Notificaciones"
-            title="Notificaciones"
-          >
-            <BellIcon size={20} />
-            <span className="notif-indicator position-absolute rounded-circle" aria-hidden="true" />
-          </button>
+                  <span className="flex-grow-1">{item.name}</span>
+                </NavLink>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
 
-          {/* Menú desplegable del Perfil con Dropdown de React Bootstrap */}
-          <Dropdown align="end" className="topbar-user-dropdown">
-            <Dropdown.Toggle
-              variant="link"
-              id="user-profile-dropdown"
-              className="p-0 border-0 text-decoration-none"
-              aria-label="Menú de usuario"
+      {/* Navegación secundaria */}
+      <div>
+        <div className="border-top border-secondary my-3" role="separator" />
+
+        <ul className="list-unstyled m-0 p-0 d-flex flex-column gap-1">
+
+          {/* Mi Perfil */}
+          <li className="w-100">
+            <NavLink
+              to="/perfil"
+              className={obtenerClaseEnlace}
+              onClick={handleClick}
             >
-              <div className="topbar-avatar rounded-circle d-flex align-items-center justify-content-center text-white fw-bold">
-                <span className="small">FZ</span>
-              </div>
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu className="topbar-dropdown-menu border border-secondary shadow-lg rounded-3 py-2 mt-2">
-              <div className="px-3 py-2 border-bottom border-secondary">
-                <p className="user-name mb-0 fw-bold text-light">Usuario FORZA</p>
-                <p className="user-email mb-0 text-secondary small">atleta@forza.app</p>
-              </div>
-
-              <div className="py-1">
-                <Dropdown.Item as={Link} to="/perfil" className="dropdown-item-forza d-flex align-items-center px-3 py-2">
-                  <UserIcon size={16} className="me-2" />
-                  Mi Perfil
-                </Dropdown.Item>
-
-                <Dropdown.Item as={Link} to="/dashboard" className="dropdown-item-forza px-3 py-2">
-                  Progreso
-                </Dropdown.Item>
-              </div>
-
-              <Dropdown.Divider className="border-secondary my-1" />
-
-              <Dropdown.Item
-                as="button"
-                className="dropdown-item-forza text-danger px-3 py-2 w-100 text-start"
-                onClick={onLogout}
+              <span
+                className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
+                aria-hidden="true"
               >
-                Cerrar sesión
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+                <UserIcon size={20} />
+              </span>
+
+              <span className="flex-grow-1">Mi Perfil</span>
+            </NavLink>
+          </li>
+
+          {/* Mostrar Cerrar sesión o Login/Registro */}
+          {usuario ? (
+            <li className="w-100">
+              <button
+                type="button"
+                className={`${clasesEnlace} sidebar-logout-btn border-0 bg-transparent text-start`}
+                onClick={handleLogoutClick}
+                aria-label="Cerrar sesión"
+              >
+                <span
+                  className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
+                  aria-hidden="true"
+                >
+                  <LogoutIcon size={20} />
+                </span>
+
+                <span className="flex-grow-1">Cerrar sesión</span>
+              </button>
+            </li>
+          ) : (
+            <>
+              <li className="w-100">
+                <NavLink
+                  to="/login"
+                  className={obtenerClaseEnlace}
+                  onClick={handleClick}
+                >
+                  <span
+                    className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
+                    aria-hidden="true"
+                  >
+                    🔐
+                  </span>
+
+                  <span className="flex-grow-1">Iniciar sesión</span>
+                </NavLink>
+              </li>
+
+              <li className="w-100">
+                <NavLink
+                  to="/registro"
+                  className={obtenerClaseEnlace}
+                  onClick={handleClick}
+                >
+                  <span
+                    className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
+                    aria-hidden="true"
+                  >
+                    ⚡
+                  </span>
+
+                  <span className="flex-grow-1">Registrarse</span>
+                </NavLink>
+              </li>
+            </>
+          )}
+
+        </ul>
       </div>
-    </header>
+    </div>
   );
 }
 
-export default Topbar;
+export default NavigationItems;

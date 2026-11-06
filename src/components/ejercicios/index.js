@@ -1,4 +1,6 @@
-// Espacio reservado para los componentes de Ejercicios
-// Ejemplos: EjercicioCard.jsx, EjercicioFiltro.jsx, EjercicioDetalle.jsx
-export {};
-
+export { default as EjercicioCard } from './EjercicioCard';
+export {
+    default as EjercicioFiltros,
+    GRUPOS_MUSCULARES,
+    DIFICULTADES,
+} from './EjercicioFiltros';
