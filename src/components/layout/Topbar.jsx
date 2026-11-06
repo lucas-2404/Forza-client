@@ -1,35 +1,32 @@
 
 import { useState, useEffect } from 'react';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Dropdown, Button } from 'react-bootstrap';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
-  HomeIcon,
-  DumbbellIcon,
-  CalendarIcon,
-  ChartIcon,
-  HeartIcon,
+  SearchIcon,
+  BellIcon,
+  MenuIcon,
   UserIcon,
-  LogoutIcon,
+  DumbbellIcon,
 } from './Icons';
 
-// Enlaces principales del Sidebar
-export const mainNavLinks = [
-  { name: 'Inicio', path: '/', icon: HomeIcon, end: true },
-  { name: 'Ejercicios', path: '/ejercicios', icon: DumbbellIcon },
-  { name: 'Rutinas', path: '/rutinas', icon: CalendarIcon },
-  { name: 'Progreso', path: '/dashboard', icon: ChartIcon },
-  { name: 'Favoritos', path: '/favoritos', icon: HeartIcon },
-];
+// Barra superior de FORZA
+// Diseño responsive con Bootstrap y autenticación
 
-// Clases Bootstrap reutilizadas para los enlaces
-const clasesEnlace =
-  'sidebar-link d-flex align-items-center gap-3 p-2 px-3 rounded-3 text-decoration-none w-100';
-
-function NavigationItems({ onItemClick, onLogout }) {
+function Topbar({
+  onToggleMobileMenu,
+  searchValue = '',
+  onSearchChange,
+  onSearchSubmit,
+  onLogout,
+}) {
+  const [internalSearch, setInternalSearch] = useState(searchValue);
   const [usuario, setUsuario] = useState(null);
+
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Actualizar usuario al cambiar de ruta
+  // Actualizar el usuario cuando cambia la ruta
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem('forza_user');
 
@@ -44,153 +41,269 @@ function NavigationItems({ onItemClick, onLogout }) {
     }
   }, [location]);
 
-  // Cerrar el menú lateral en dispositivos móviles
-  const handleClick = () => {
-    if (onItemClick) {
-      onItemClick();
+  // Mantener sincronizado el buscador
+  useEffect(() => {
+    setInternalSearch(searchValue);
+  }, [searchValue]);
+
+  // Escribir en el buscador
+  const handleInputChange = (e) => {
+    const valor = e.target.value;
+    setInternalSearch(valor);
+
+    if (onSearchChange) {
+      onSearchChange(valor);
     }
   };
 
-  // Cerrar sesión y regresar al Login
-  const handleLogoutClick = (e) => {
+  // Enviar la búsqueda
+  const handleFormSubmit = (e) => {
     e.preventDefault();
 
+    if (onSearchSubmit) {
+      onSearchSubmit(internalSearch);
+    }
+  };
+
+  // Cerrar sesión
+  const handleLogoutClick = () => {
     localStorage.removeItem('forza_token');
     localStorage.removeItem('forza_user');
+
     setUsuario(null);
 
     if (onLogout) {
       onLogout();
     }
 
-    if (onItemClick) {
-      onItemClick();
-    }
-
     navigate('/login');
   };
 
-  // Aplicar la clase active cuando estamos en la ruta
-  const obtenerClaseEnlace = ({ isActive }) =>
-    isActive ? `${clasesEnlace} active` : clasesEnlace;
+  // Obtener las iniciales del usuario
+  const obtenerIniciales = () => {
+    if (!usuario || !usuario.nombre) {
+      return 'FZ';
+    }
+
+    const partes = usuario.nombre.trim().split(' ').filter(Boolean);
+
+    if (partes.length >= 2) {
+      return (partes[0][0] + partes[1][0]).toUpperCase();
+    }
+
+    return partes[0]?.slice(0, 2).toUpperCase() || 'FZ';
+  };
 
   return (
-    <div className="d-flex flex-column flex-grow-1 justify-content-between p-3">
+    <header className="forza-topbar px-3 px-lg-4 d-flex align-items-center sticky-top border-bottom border-secondary">
 
-      {/* Navegación principal */}
-      <nav aria-label="Navegación principal">
-        <ul className="list-unstyled m-0 p-0 d-flex flex-column gap-1">
-          {mainNavLinks.map((item) => {
-            const IconComponent = item.icon;
+      <div className="d-flex align-items-center justify-content-between w-100 gap-2 gap-md-3">
 
-            return (
-              <li key={item.path} className="w-100">
-                <NavLink
-                  to={item.path}
-                  end={item.end}
-                  className={obtenerClaseEnlace}
-                  onClick={handleClick}
-                >
-                  <span
-                    className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
-                    aria-hidden="true"
-                  >
-                    <IconComponent size={20} />
-                  </span>
+        {/* IZQUIERDA: Menú móvil, logo y buscador */}
+        <div
+          className="d-flex align-items-center gap-2 gap-md-3 flex-grow-1"
+          style={{ minWidth: 0, maxWidth: '460px' }}
+        >
 
-                  <span className="flex-grow-1">{item.name}</span>
-                </NavLink>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+          {/* Botón hamburguesa para móvil y tablet */}
+          <button
+            type="button"
+            className="topbar-menu-toggle d-lg-none d-inline-flex align-items-center justify-content-center"
+            onClick={onToggleMobileMenu}
+            aria-label="Abrir menú de navegación"
+          >
+            <MenuIcon size={24} />
+          </button>
 
-      {/* Navegación secundaria */}
-      <div>
-        <div className="border-top border-secondary my-3" role="separator" />
-
-        <ul className="list-unstyled m-0 p-0 d-flex flex-column gap-1">
-
-          {/* Mi Perfil */}
-          <li className="w-100">
-            <NavLink
-              to="/perfil"
-              className={obtenerClaseEnlace}
-              onClick={handleClick}
+          {/* Logo FORZA visible en móvil y tablet */}
+          <div className="d-lg-none">
+            <Link
+              to="/"
+              className="d-inline-flex align-items-center gap-2 text-decoration-none text-white fw-bold fs-5"
             >
               <span
-                className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
-                aria-hidden="true"
+                className="d-flex"
+                style={{ color: 'var(--color-primary, #9EF01A)' }}
               >
-                <UserIcon size={20} />
+                <DumbbellIcon size={22} />
               </span>
 
-              <span className="flex-grow-1">Mi Perfil</span>
-            </NavLink>
-          </li>
+              <span>FORZA</span>
+            </Link>
+          </div>
 
-          {/* Mostrar Cerrar sesión o Login/Registro */}
-          {usuario ? (
-            <li className="w-100">
-              <button
-                type="button"
-                className={`${clasesEnlace} sidebar-logout-btn border-0 bg-transparent text-start`}
-                onClick={handleLogoutClick}
-                aria-label="Cerrar sesión"
+          {/* Buscador responsive */}
+          <form
+            className="position-relative d-none d-sm-flex align-items-center w-100"
+            style={{ maxWidth: '360px', minWidth: 0 }}
+            onSubmit={handleFormSubmit}
+          >
+            <span
+              className="position-absolute start-0 ms-3 text-secondary d-flex align-items-center pe-none"
+              aria-hidden="true"
+            >
+              <SearchIcon size={17} />
+            </span>
+
+            <input
+              type="text"
+              className="topbar-search-input w-100 rounded-pill text-white ps-5 pe-3"
+              placeholder="Buscar ejercicios, rutinas..."
+              value={internalSearch}
+              onChange={handleInputChange}
+              aria-label="Buscar ejercicios o rutinas"
+            />
+          </form>
+        </div>
+
+        {/* DERECHA: Acceso, notificaciones y usuario */}
+        <div className="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
+
+          {/* Mostrar Login y Registro cuando no hay sesión */}
+          {!usuario && (
+            <div className="d-none d-md-flex align-items-center gap-2">
+
+              <Button
+                as={Link}
+                to="/login"
+                className="forza-btn-outline btn-sm py-1 px-3"
               >
-                <span
-                  className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
-                  aria-hidden="true"
-                >
-                  <LogoutIcon size={20} />
-                </span>
+                Iniciar sesión
+              </Button>
 
-                <span className="flex-grow-1">Cerrar sesión</span>
-              </button>
-            </li>
-          ) : (
-            <>
-              <li className="w-100">
-                <NavLink
-                  to="/login"
-                  className={obtenerClaseEnlace}
-                  onClick={handleClick}
-                >
-                  <span
-                    className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
-                    aria-hidden="true"
-                  >
-                    🔐
-                  </span>
+              <Button
+                as={Link}
+                to="/registro"
+                className="forza-btn-primary btn-sm py-1 px-3"
+              >
+                Registrarse
+              </Button>
 
-                  <span className="flex-grow-1">Iniciar sesión</span>
-                </NavLink>
-              </li>
-
-              <li className="w-100">
-                <NavLink
-                  to="/registro"
-                  className={obtenerClaseEnlace}
-                  onClick={handleClick}
-                >
-                  <span
-                    className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
-                    aria-hidden="true"
-                  >
-                    ⚡
-                  </span>
-
-                  <span className="flex-grow-1">Registrarse</span>
-                </NavLink>
-              </li>
-            </>
+            </div>
           )}
 
-        </ul>
+          {/* Botón visual de notificaciones */}
+          <button
+            type="button"
+            className="topbar-icon-btn position-relative d-inline-flex align-items-center justify-content-center rounded-circle"
+            aria-label="Notificaciones"
+            title="Notificaciones"
+          >
+            <BellIcon size={20} />
+
+            <span
+              className="notif-indicator position-absolute rounded-circle"
+              aria-hidden="true"
+            />
+          </button>
+
+          {/* Menú desplegable del usuario */}
+          <Dropdown align="end" className="topbar-user-dropdown">
+
+            <Dropdown.Toggle
+              variant="link"
+              id="user-profile-dropdown"
+              className="p-0 border-0 text-decoration-none"
+              aria-label="Menú de usuario"
+            >
+              <div className="topbar-avatar rounded-circle d-flex align-items-center justify-content-center text-white fw-bold">
+                <span className="avatar-initials">
+                  {obtenerIniciales()}
+                </span>
+              </div>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu className="topbar-dropdown-menu border border-secondary shadow-lg rounded-3 py-2 mt-2">
+
+              {usuario ? (
+                <>
+                  {/* Datos del usuario conectado */}
+                  <div className="dropdown-user-header px-3 py-2">
+
+                    <p className="user-name mb-0 fw-bold text-light">
+                      {usuario.nombre}
+                    </p>
+
+                    <p className="user-email mb-0 text-secondary small">
+                      {usuario.email}
+                    </p>
+
+                  </div>
+
+                  <Dropdown.Divider className="border-secondary my-1" />
+
+                  {/* Enlace a Mi Perfil */}
+                  <Dropdown.Item
+                    as={Link}
+                    to="/perfil"
+                    className="dropdown-item-forza d-flex align-items-center px-3 py-2"
+                  >
+                    <UserIcon size={16} className="me-2" />
+                    Mi Perfil
+                  </Dropdown.Item>
+
+                  {/* Enlace a Progreso */}
+                  <Dropdown.Item
+                    as={Link}
+                    to="/dashboard"
+                    className="dropdown-item-forza px-3 py-2"
+                  >
+                    Progreso
+                  </Dropdown.Item>
+
+                  <Dropdown.Divider className="border-secondary my-1" />
+
+                  {/* Cerrar sesión */}
+                  <Dropdown.Item
+                    as="button"
+                    className="dropdown-item-forza text-danger px-3 py-2 w-100 text-start"
+                    onClick={handleLogoutClick}
+                  >
+                    Cerrar sesión
+                  </Dropdown.Item>
+                </>
+              ) : (
+                <>
+                  {/* Menú para usuarios invitados */}
+                  <div className="dropdown-user-header px-3 py-2">
+
+                    <p className="user-name mb-0 fw-bold text-light">
+                      Invitado
+                    </p>
+
+                    <p className="user-email mb-0 text-secondary small">
+                      Sin sesión activa
+                    </p>
+
+                  </div>
+
+                  <Dropdown.Divider className="border-secondary my-1" />
+
+                  <Dropdown.Item
+                    as={Link}
+                    to="/login"
+                    className="dropdown-item-forza px-3 py-2"
+                  >
+                    🔐 Iniciar sesión
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    as={Link}
+                    to="/registro"
+                    className="dropdown-item-forza px-3 py-2"
+                  >
+                    ⚡ Registrarse
+                  </Dropdown.Item>
+                </>
+              )}
+
+            </Dropdown.Menu>
+          </Dropdown>
+
+        </div>
       </div>
-    </div>
+    </header>
   );
 }
 
-export default NavigationItems;
+export default Topbar;
