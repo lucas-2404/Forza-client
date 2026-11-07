@@ -391,3 +391,29 @@ a:hover {
   font-size: 0.9rem;
   color: var(--text-secondary);
 }
+
+/* ==========================================================================
+   MÓDULO DE RUTINAS Y PROGRESO (feature/rutinas)
+   Estilos complementarios mínimos (90% Bootstrap, 10% CSS)
+   ========================================================================== */
+
+/* Efecto hover suave para tarjetas de rutinas */
+.rutina-card {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.rutina-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(158, 240, 26, 0.4) !important;
+}
+
+/* Borde sutil para contenedores vacíos */
+.border-dashed {
+  border-style: dashed !important;
+}
+
+/* Ajuste de color del ProgressBar nativo de Bootstrap */
+.progress-bar {
+  background-color: var(--color-primary) !important;
+}
+
