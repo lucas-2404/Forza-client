@@ -12,6 +12,9 @@ import PerfilPage from '../pages/PerfilPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import FavoritosPage from '../pages/FavoritosPage';
 
+// Páginas del módulo de Rutinas (feature/rutinas)
+import FormularioRutinaPage from '../pages/FormularioRutinaPage';
+
 /**
  * Definición centralizada de las Rutas de FORZA.
  * Integra el nuevo Layout (Diseño B) manteniendo intactos los componentes de los compañeros.
@@ -29,6 +32,8 @@ function Rutas() {
 
         {/* 3. Rutinas */}
         <Route path="rutinas" element={<RutinaPage />} />
+        <Route path="rutinas/nueva" element={<FormularioRutinaPage />} />
+        <Route path="rutinas/editar/:id" element={<FormularioRutinaPage />} />
 
         {/* 4. Progreso / Dashboard */}
         <Route path="dashboard" element={<DashboardPage />} />
