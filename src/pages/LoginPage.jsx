@@ -1,20 +1,37 @@
 import { useState } from 'react';
-import { Container, Row, Col, Card, Form, Button, Spinner } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Badge,
+  Spinner,
+  InputGroup,
+} from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import api from '../services/api';
 
 /**
- * Página de Inicio de Sesión (Login) adaptada con React Bootstrap.
- * Utiliza: Container, Row, Col, Card, Form, Button y Spinner.
+ * Página de Inicio de Sesión (Login) con diseño Split-Card.
+ * Utiliza: Container, Row, Col, Card, Form, InputGroup, Button, Badge y Spinner de React Bootstrap.
  */
 function LoginPage() {
   // Estados controlados para los campos del formulario
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [mostrarPassword, setMostrarPassword] = useState(false);
   const [cargando, setCargando] = useState(false);
 
   const navigate = useNavigate();
+
+  // Botón rápido para autocompletar credenciales de prueba en la presentación
+  const handleCompletarDemo = () => {
+    setEmail('atleta@forza.app');
+    setPassword('forza123');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,12 +84,12 @@ function LoginPage() {
 
       const token = respuesta.data?.token || 'forza_token_activo';
       const usuario = respuesta.data?.usuario || respuesta.data?.user || {
-        nombre: email.split('@')[0],
+        nombre: email === 'atleta@forza.app' ? 'Atleta Demo' : email.split('@')[0],
         email,
         nivel: 'Intermedio',
-        objetivo: 'Hipertrofia muscular y fuerza',
-        peso: '75',
-        altura: '175',
+        objetivo: 'Ganar Masa Muscular',
+        peso: '78',
+        altura: '178',
       };
 
       localStorage.setItem('forza_token', token);
@@ -87,7 +104,7 @@ function LoginPage() {
         confirmButtonColor: '#9EF01A',
       });
 
-      navigate('/dashboard');
+      navigate('/perfil');
     } catch (error) {
       // Si el servidor respondió con un error de credenciales (ej. 401 o 400)
       if (error.response) {
@@ -137,12 +154,12 @@ function LoginPage() {
           usuarioGuardado && usuarioGuardado.email === email
             ? usuarioGuardado
             : {
-                nombre: email.split('@')[0],
+                nombre: email === 'atleta@forza.app' ? 'Atleta Demo' : email.split('@')[0],
                 email,
                 nivel: 'Intermedio',
-                objetivo: 'Hipertrofia muscular y fuerza',
-                peso: '75',
-                altura: '175',
+                objetivo: 'Ganar Masa Muscular',
+                peso: '78',
+                altura: '178',
               };
 
         localStorage.setItem('forza_token', 'token_local_forza');
@@ -157,7 +174,7 @@ function LoginPage() {
           confirmButtonColor: '#9EF01A',
         });
 
-        navigate('/dashboard');
+        navigate('/perfil');
       }
     } finally {
       setCargando(false);
@@ -167,73 +184,168 @@ function LoginPage() {
   return (
     <Container className="py-4">
       <Row className="justify-content-center">
-        <Col md={8} lg={5}>
-          <Card className="forza-card">
-            <Card.Body className="p-4">
-              <div className="text-center mb-4">
-                <div className="fs-1 mb-2">🔐</div>
-                <h1 className="h3 fw-bold text-light">Iniciar Sesión</h1>
-                <p className="text-secondary small">
-                  Ingresá tus credenciales para acceder a FORZA.
-                </p>
-              </div>
+        <Col lg={10} xl={9}>
+          <Card className="forza-card overflow-hidden">
+            <Row className="g-0">
+              {/* Columna Izquierda: Panel Motivacional (Oculto en móviles) */}
+              <Col
+                md={5}
+                className="d-none d-md-flex flex-column justify-content-between p-4 border-end border-secondary"
+                style={{ backgroundColor: 'rgba(13, 17, 20, 0.75)' }}
+              >
+                <div>
+                  <Badge className="forza-badge mb-3">⚡ FORZA CLUB</Badge>
+                  <h2 className="h3 fw-bold text-light mb-3">
+                    Superá tus límites en cada sesión
+                  </h2>
+                  <p className="text-secondary small mb-4">
+                    Tu plataforma de entrenamiento para planificar cargas, organizar rutinas y
+                    medir tu evolución física.
+                  </p>
 
-              {/* Formulario controlado utilizando componentes Form de React Bootstrap */}
-              <Form onSubmit={handleSubmit} noValidate>
-                <Form.Group className="mb-3" controlId="loginEmail">
-                  <Form.Label className="forza-form-label">Correo Electrónico</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="tu@email.com"
-                    className="forza-form-control"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </Form.Group>
+                  {/* 3 Puntos clave con tildes en verde lima */}
+                  <div className="d-flex flex-column gap-3 mt-4">
+                    <div className="d-flex align-items-start gap-2">
+                      <span className="fw-bold" style={{ color: '#9EF01A' }}>
+                        ✔
+                      </span>
+                      <div>
+                        <strong className="text-light d-block small">
+                          Rutinas personalizadas
+                        </strong>
+                        <span className="text-secondary small">
+                          Planes adaptados a tu nivel y objetivo.
+                        </span>
+                      </div>
+                    </div>
 
-                <Form.Group className="mb-4" controlId="loginPassword">
-                  <Form.Label className="forza-form-label">Contraseña</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="••••••••"
-                    className="forza-form-control"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </Form.Group>
+                    <div className="d-flex align-items-start gap-2">
+                      <span className="fw-bold" style={{ color: '#9EF01A' }}>
+                        ✔
+                      </span>
+                      <div>
+                        <strong className="text-light d-block small">
+                          Seguimiento de progreso
+                        </strong>
+                        <span className="text-secondary small">
+                          Control de series, repeticiones y biometría.
+                        </span>
+                      </div>
+                    </div>
 
-                <Button
-                  type="submit"
-                  className="forza-btn-primary w-100 d-flex align-items-center justify-content-center"
-                  disabled={cargando}
-                >
-                  {cargando ? (
-                    <>
-                      <Spinner
-                        as="span"
-                        animation="border"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                        className="me-2"
+                    <div className="d-flex align-items-start gap-2">
+                      <span className="fw-bold" style={{ color: '#9EF01A' }}>
+                        ✔
+                      </span>
+                      <div>
+                        <strong className="text-light d-block small">
+                          Comunidad fitness
+                        </strong>
+                        <span className="text-secondary small">
+                          Entrená con estructura y disciplina diaria.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-top border-secondary pt-3 mt-4">
+                  <span className="text-secondary small d-block">
+                    🏋️‍♂️ <strong>FORZA Training System</strong>
+                  </span>
+                </div>
+              </Col>
+
+              {/* Columna Derecha: Formulario de Login */}
+              <Col md={7}>
+                <Card.Body className="p-4 p-lg-5">
+                  <div className="mb-4">
+                    <h1 className="h3 fw-bold text-light mb-1">Iniciar Sesión</h1>
+                    <p className="text-secondary small mb-0">
+                      Ingresá tus credenciales para acceder a tu panel de atleta.
+                    </p>
+                  </div>
+
+                  <Form onSubmit={handleSubmit} noValidate>
+                    <Form.Group className="mb-3" controlId="loginEmail">
+                      <Form.Label className="forza-form-label">Correo Electrónico</Form.Label>
+                      <Form.Control
+                        type="email"
+                        placeholder="tu@email.com"
+                        className="forza-form-control"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                       />
-                      Ingresando...
-                    </>
-                  ) : (
-                    'Ingresar a la Plataforma'
-                  )}
-                </Button>
-              </Form>
+                    </Form.Group>
 
-              <div className="text-center mt-4">
-                <span className="text-secondary small">¿No tenés cuenta? </span>
-                <Link to="/registro" className="fw-bold" style={{ color: 'var(--color-primary)' }}>
-                  Registrate acá
-                </Link>
-              </div>
-            </Card.Body>
+                    <Form.Group className="mb-4" controlId="loginPassword">
+                      <Form.Label className="forza-form-label">Contraseña</Form.Label>
+                      <InputGroup>
+                        <Form.Control
+                          type={mostrarPassword ? 'text' : 'password'}
+                          placeholder="••••••••"
+                          className="forza-form-control"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                        />
+                        <Button
+                          type="button"
+                          className="forza-btn-secondary px-3"
+                          onClick={() => setMostrarPassword(!mostrarPassword)}
+                        >
+                          {mostrarPassword ? 'Ocultar' : 'Mostrar'}
+                        </Button>
+                      </InputGroup>
+                    </Form.Group>
+
+                    <div className="d-grid gap-2">
+                      <Button
+                        type="submit"
+                        className="forza-btn-primary w-100 d-flex align-items-center justify-content-center"
+                        disabled={cargando}
+                      >
+                        {cargando ? (
+                          <>
+                            <Spinner
+                              as="span"
+                              animation="border"
+                              size="sm"
+                              role="status"
+                              aria-hidden="true"
+                              className="me-2"
+                            />
+                            Ingresando...
+                          </>
+                        ) : (
+                          'Ingresar a la Plataforma'
+                        )}
+                      </Button>
+
+                      <Button
+                        type="button"
+                        className="forza-btn-outline w-100 btn-sm"
+                        onClick={handleCompletarDemo}
+                      >
+                        ⚡ Completar Usuario Demo
+                      </Button>
+                    </div>
+                  </Form>
+
+                  <div className="text-center mt-4 pt-2 border-top border-secondary">
+                    <span className="text-secondary small">¿No tenés cuenta? </span>
+                    <Link
+                      to="/registro"
+                      className="fw-bold"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      Registrate acá
+                    </Link>
+                  </div>
+                </Card.Body>
+              </Col>
+            </Row>
           </Card>
         </Col>
       </Row>

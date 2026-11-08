@@ -156,32 +156,8 @@ function Topbar({
           </form>
         </div>
 
-        {/* DERECHA: Acceso, notificaciones y usuario */}
+        {/* DERECHA: Notificaciones y acceso / perfil de usuario */}
         <div className="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
-
-          {/* Mostrar Login y Registro cuando no hay sesión */}
-          {!usuario && (
-            <div className="d-none d-md-flex align-items-center gap-2">
-
-              <Button
-                as={Link}
-                to="/login"
-                className="forza-btn-outline btn-sm py-1 px-3"
-              >
-                Iniciar sesión
-              </Button>
-
-              <Button
-                as={Link}
-                to="/registro"
-                className="forza-btn-primary btn-sm py-1 px-3"
-              >
-                Registrarse
-              </Button>
-
-            </div>
-          )}
-
           {/* Botón visual de notificaciones */}
           <button
             type="button"
@@ -197,109 +173,79 @@ function Topbar({
             />
           </button>
 
-          {/* Menú desplegable del usuario */}
-          <Dropdown align="end" className="topbar-user-dropdown">
-
-            <Dropdown.Toggle
-              variant="link"
-              id="user-profile-dropdown"
-              className="p-0 border-0 text-decoration-none"
-              aria-label="Menú de usuario"
-            >
-              <div className="topbar-avatar rounded-circle d-flex align-items-center justify-content-center text-white fw-bold">
-                <span className="avatar-initials">
-                  {obtenerIniciales()}
+          {/* Si el usuario está logueado: Avatar + Nombre con menú para ir a Mi Perfil o Cerrar sesión */}
+          {usuario ? (
+            <Dropdown align="end" className="topbar-user-dropdown">
+              <Dropdown.Toggle
+                variant="link"
+                id="user-profile-dropdown"
+                className="p-0 border-0 text-decoration-none d-flex align-items-center gap-2"
+                aria-label="Menú de usuario"
+              >
+                <div className="topbar-avatar rounded-circle d-flex align-items-center justify-content-center text-white fw-bold">
+                  <span className="avatar-initials">{obtenerIniciales()}</span>
+                </div>
+                <span className="d-none d-sm-inline text-light fw-semibold small">
+                  {usuario.nombre}
                 </span>
-              </div>
-            </Dropdown.Toggle>
+              </Dropdown.Toggle>
 
-            <Dropdown.Menu className="topbar-dropdown-menu border border-secondary shadow-lg rounded-3 py-2 mt-2">
+              <Dropdown.Menu className="topbar-dropdown-menu border border-secondary shadow-lg rounded-3 py-2 mt-2">
+                <div className="dropdown-user-header px-3 py-2">
+                  <p className="user-name mb-0 fw-bold text-light">{usuario.nombre}</p>
+                  <p className="user-email mb-0 text-secondary small">{usuario.email}</p>
+                </div>
 
-              {usuario ? (
-                <>
-                  {/* Datos del usuario conectado */}
-                  <div className="dropdown-user-header px-3 py-2">
+                <Dropdown.Divider className="border-secondary my-1" />
 
-                    <p className="user-name mb-0 fw-bold text-light">
-                      {usuario.nombre}
-                    </p>
+                <Dropdown.Item
+                  as={Link}
+                  to="/perfil"
+                  className="dropdown-item-forza d-flex align-items-center px-3 py-2"
+                >
+                  <UserIcon size={16} className="me-2" />
+                  Mi Perfil
+                </Dropdown.Item>
 
-                    <p className="user-email mb-0 text-secondary small">
-                      {usuario.email}
-                    </p>
+                <Dropdown.Item
+                  as={Link}
+                  to="/dashboard"
+                  className="dropdown-item-forza px-3 py-2"
+                >
+                  Progreso
+                </Dropdown.Item>
 
-                  </div>
+                <Dropdown.Divider className="border-secondary my-1" />
 
-                  <Dropdown.Divider className="border-secondary my-1" />
+                <Dropdown.Item
+                  as="button"
+                  className="dropdown-item-forza text-danger px-3 py-2 w-100 text-start"
+                  onClick={handleLogoutClick}
+                >
+                  Cerrar sesión
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            /* Si NO está logueado: Botones directos de Iniciar sesión y Registrarse */
+            <div className="d-flex align-items-center gap-2">
+              <Button
+                as={Link}
+                to="/login"
+                className="forza-btn-outline btn-sm py-1 px-3"
+              >
+                Iniciar sesión
+              </Button>
 
-                  {/* Enlace a Mi Perfil */}
-                  <Dropdown.Item
-                    as={Link}
-                    to="/perfil"
-                    className="dropdown-item-forza d-flex align-items-center px-3 py-2"
-                  >
-                    <UserIcon size={16} className="me-2" />
-                    Mi Perfil
-                  </Dropdown.Item>
-
-                  {/* Enlace a Progreso */}
-                  <Dropdown.Item
-                    as={Link}
-                    to="/dashboard"
-                    className="dropdown-item-forza px-3 py-2"
-                  >
-                    Progreso
-                  </Dropdown.Item>
-
-                  <Dropdown.Divider className="border-secondary my-1" />
-
-                  {/* Cerrar sesión */}
-                  <Dropdown.Item
-                    as="button"
-                    className="dropdown-item-forza text-danger px-3 py-2 w-100 text-start"
-                    onClick={handleLogoutClick}
-                  >
-                    Cerrar sesión
-                  </Dropdown.Item>
-                </>
-              ) : (
-                <>
-                  {/* Menú para usuarios invitados */}
-                  <div className="dropdown-user-header px-3 py-2">
-
-                    <p className="user-name mb-0 fw-bold text-light">
-                      Invitado
-                    </p>
-
-                    <p className="user-email mb-0 text-secondary small">
-                      Sin sesión activa
-                    </p>
-
-                  </div>
-
-                  <Dropdown.Divider className="border-secondary my-1" />
-
-                  <Dropdown.Item
-                    as={Link}
-                    to="/login"
-                    className="dropdown-item-forza px-3 py-2"
-                  >
-                    🔐 Iniciar sesión
-                  </Dropdown.Item>
-
-                  <Dropdown.Item
-                    as={Link}
-                    to="/registro"
-                    className="dropdown-item-forza px-3 py-2"
-                  >
-                    ⚡ Registrarse
-                  </Dropdown.Item>
-                </>
-              )}
-
-            </Dropdown.Menu>
-          </Dropdown>
-
+              <Button
+                as={Link}
+                to="/registro"
+                className="forza-btn-primary btn-sm py-1 px-3"
+              >
+                Registrarse
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </header>
