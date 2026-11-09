@@ -397,14 +397,20 @@ a:hover {
    Estilos complementarios mínimos (90% Bootstrap, 10% CSS)
    ========================================================================== */
 
-/* Efecto hover suave para tarjetas de rutinas */
+/* Efecto hover suave para tarjetas de rutinas e imágenes */
 .rutina-card {
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .rutina-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(158, 240, 26, 0.4) !important;
+  transform: translateY(-4px);
+  border-color: rgba(158, 240, 26, 0.45) !important;
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.7);
+}
+
+.rutina-card:hover .rutina-card-img {
+  transform: scale(1.05);
+  filter: brightness(0.75) contrast(1.15) !important;
 }
 
 /* Borde sutil para contenedores vacíos */

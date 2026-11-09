@@ -17,6 +17,7 @@ import {
   obtenerRutinas,
   agregarRutina,
   actualizarRutina,
+  obtenerImagenEjercicio,
 } from '../services/rutinasService';
 
 const DIAS = [
@@ -48,6 +49,7 @@ function FormularioRutinaPage() {
 
   const [nombre, setNombre] = useState('');
   const [objetivo, setObjetivo] = useState(OBJETIVOS[0]);
+  const [nivel, setNivel] = useState('Principiante'); // Principiante | Intermedio | Avanzado
   const [diasSeleccionados, setDiasSeleccionados] = useState(['lunes', 'miercoles', 'viernes']);
   const [diaActivo, setDiaActivo] = useState('lunes');
   const [ejerciciosPorDia, setEjerciciosPorDia] = useState({});
@@ -61,6 +63,7 @@ function FormularioRutinaPage() {
       if (rutina) {
         setNombre(rutina.nombre || '');
         setObjetivo(rutina.objetivo || OBJETIVOS[0]);
+        setNivel(rutina.nivel || 'Principiante');
         setDiasSeleccionados(rutina.diasSeleccionados || []);
         setEjerciciosPorDia(rutina.dias || {});
         if (rutina.diasSeleccionados?.length > 0) {
@@ -168,9 +171,22 @@ function FormularioRutinaPage() {
       diasGuardar[dia] = ejerciciosPorDia[dia] || [];
     });
 
+    // Derivar grupos musculares automáticamente de los ejercicios seleccionados
+    const grupos = [
+      ...new Set(
+        Object.values(diasGuardar)
+          .flat()
+          .map((e) => e.grupoMuscular)
+          .filter(Boolean)
+      ),
+    ];
+
     const datos = {
       nombre: nombre.trim(),
       objetivo,
+      nivel,
+      grupos,
+      duracionMin: 45, // duración estimada por defecto
       diasSeleccionados,
       dias: diasGuardar,
     };
@@ -248,6 +264,20 @@ function FormularioRutinaPage() {
                       {obj}
                     </option>
                   ))}
+                </Form.Select>
+              </Form.Group>
+
+              {/* Selector de nivel de dificultad */}
+              <Form.Group className="mb-4">
+                <Form.Label className="small text-secondary">Nivel de dificultad</Form.Label>
+                <Form.Select
+                  value={nivel}
+                  onChange={(e) => setNivel(e.target.value)}
+                  className="bg-black text-light border-secondary"
+                >
+                  <option value="Principiante">🟢 Principiante</option>
+                  <option value="Intermedio">🟡 Intermedio</option>
+                  <option value="Avanzado">🔴 Avanzado</option>
                 </Form.Select>
               </Form.Group>
 
@@ -338,7 +368,30 @@ function FormularioRutinaPage() {
                       className="d-flex align-items-center justify-content-between p-2 px-3 bg-black rounded border border-secondary"
                     >
                       <div className="d-flex align-items-center gap-3">
-                        <span className="fs-4">{ej.icono || '💪'}</span>
+                        <div
+                          className="rounded-2 overflow-hidden border border-secondary flex-shrink-0"
+                          style={{ width: '38px', height: '38px', backgroundColor: '#0D1114' }}
+                        >
+                          <img
+                            src={ej.imagen || obtenerImagenEjercicio(ej)}
+                            alt={ej.nombre}
+                            loading="lazy"
+                            className="w-100 h-100"
+                            style={{ objectFit: 'cover' }}
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              if (e.currentTarget.nextSibling) {
+                                e.currentTarget.nextSibling.style.display = 'flex';
+                              }
+                            }}
+                          />
+                          <div
+                            className="w-100 h-100 align-items-center justify-content-center text-secondary"
+                            style={{ display: 'none', fontSize: '1.2rem' }}
+                          >
+                            {ej.icono || '💪'}
+                          </div>
+                        </div>
                         <div>
                           <div className="fw-bold small text-light">{ej.nombre}</div>
                           <div className="text-secondary" style={{ fontSize: '0.8rem' }}>

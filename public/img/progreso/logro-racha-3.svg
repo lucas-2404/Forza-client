@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgFlame" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3b1705" />
+      <stop offset="100%" stop-color="#140b08" />
+    </radialGradient>
+    <linearGradient id="fireOuter" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#c2410c" />
+      <stop offset="50%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#fbbf24" />
+    </linearGradient>
+    <linearGradient id="fireLimeCore" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#84cc16" />
+      <stop offset="70%" stop-color="#9EF01A" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+    <filter id="flameGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="url(#bgFlame)" stroke="#ea580c" stroke-width="2" stroke-opacity="0.5" />
+  <!-- Outer Flame -->
+  <path d="M50 16 C53 28 64 34 68 44 C74 58 66 76 50 82 C34 76 26 58 32 44 C36 34 45 28 47 22 C48 19 49 17 50 16 Z" fill="url(#fireOuter)" filter="url(#flameGlow)" />
+  <!-- Inner Flame with lime electric intensity -->
+  <path d="M50 36 C52 44 60 49 62 56 C65 65 59 74 50 78 C41 74 35 65 38 56 C40 49 48 44 49 39 C49 37 50 36 50 36 Z" fill="url(#fireLimeCore)" />
+  <!-- Core spark -->
+  <ellipse cx="50" cy="67" rx="6" ry="8" fill="#ffffff" />
+  <!-- '3' Badge overlay -->
+  <circle cx="70" cy="70" r="13" fill="#171C20" stroke="#ea580c" stroke-width="2" />
+  <text x="70" y="75" text-anchor="middle" fill="#9EF01A" font-size="14" font-weight="900" font-family="sans-serif">3</text>
+</svg>
+
