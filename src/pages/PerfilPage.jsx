@@ -5,18 +5,18 @@ import Swal from 'sweetalert2';
 import api from '../services/api';
 
 /**
- * Página de Perfil de Usuario adaptada con React Bootstrap.
- * Utiliza: Container, Row, Col, Card, Form, Button, Badge y Spinner de react-bootstrap.
+ * Página de Perfil de Usuario (Dashboard de Atleta + Cálculo de IMC en vivo).
+ * Utiliza: Container, Row, Col, Card, Form, Button, Badge y Spinner de React Bootstrap.
  */
 function PerfilPage() {
   // Estado para verificar si existe una sesión activa en localStorage
   const [sesionActiva, setSesionActiva] = useState(false);
 
-  // Estados dinámicos para los datos del perfil del usuario
+  // Estados dinámicos para los datos del perfil del atleta
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [nivel, setNivel] = useState('Intermedio');
-  const [objetivo, setObjetivo] = useState('Hipertrofia muscular y fuerza');
+  const [objetivo, setObjetivo] = useState('Ganar Masa Muscular');
   const [peso, setPeso] = useState('75');
   const [altura, setAltura] = useState('175');
   const [guardando, setGuardando] = useState(false);
@@ -37,10 +37,10 @@ function PerfilPage() {
         const usuarioLocal = JSON.parse(usuarioLocalJSON);
         if (usuarioLocal && (usuarioLocal.email || usuarioLocal.nombre)) {
           setSesionActiva(true);
-          setNombre(usuarioLocal.nombre || 'Usuario FORZA');
+          setNombre(usuarioLocal.nombre || 'Atleta FORZA');
           setEmail(usuarioLocal.email || '');
           setNivel(usuarioLocal.nivel || 'Intermedio');
-          setObjetivo(usuarioLocal.objetivo || 'Hipertrofia muscular y fuerza');
+          setObjetivo(usuarioLocal.objetivo || 'Ganar Masa Muscular');
           setPeso(usuarioLocal.peso ? String(usuarioLocal.peso) : '75');
           setAltura(usuarioLocal.altura ? String(usuarioLocal.altura) : '175');
         } else {
@@ -59,10 +59,10 @@ function PerfilPage() {
           const respuesta = await api.get('/usuarios/perfil');
           const datos = respuesta.data?.usuario || respuesta.data;
           if (datos && datos.email) {
-            setNombre(datos.nombre || 'Usuario FORZA');
+            setNombre(datos.nombre || 'Atleta FORZA');
             setEmail(datos.email);
             setNivel(datos.nivel || 'Intermedio');
-            setObjetivo(datos.objetivo || 'Hipertrofia muscular y fuerza');
+            setObjetivo(datos.objetivo || 'Ganar Masa Muscular');
             setPeso(datos.peso ? String(datos.peso) : '75');
             setAltura(datos.altura ? String(datos.altura) : '175');
             localStorage.setItem('forza_user', JSON.stringify(datos));
@@ -76,7 +76,30 @@ function PerfilPage() {
     cargarDatosPerfil();
   }, []);
 
-  // Guardar los cambios del formulario de perfil
+  // Obtener las iniciales del nombre del usuario para el avatar circular
+  const obtenerIniciales = () => {
+    if (!nombre || !nombre.trim()) return 'FZ';
+    const palabras = nombre.trim().split(' ');
+    if (palabras.length >= 2) {
+      return (palabras[0][0] + palabras[1][0]).toUpperCase();
+    }
+    return nombre.trim().slice(0, 2).toUpperCase();
+  };
+
+  // Calcular el Índice de Masa Corporal (IMC) automáticamente en vivo
+  const calcularIMC = () => {
+    const pesoNum = parseFloat(peso);
+    const alturaMetros = parseFloat(altura) / 100;
+
+    if (!pesoNum || !alturaMetros || pesoNum <= 0 || alturaMetros <= 0) {
+      return '-';
+    }
+
+    const imc = pesoNum / (alturaMetros * alturaMetros);
+    return imc.toFixed(1);
+  };
+
+  // Guardar los cambios del formulario de configuración y biometría
   const handleGuardarPerfil = async (e) => {
     e.preventDefault();
 
@@ -107,7 +130,7 @@ function PerfilPage() {
       nombre: nombre.trim(),
       email: email.trim(),
       nivel,
-      objetivo: objetivo.trim() || 'Hipertrofia muscular y fuerza',
+      objetivo,
       peso,
       altura,
       ...(passwordPrevia ? { password: passwordPrevia } : {}),
@@ -119,18 +142,17 @@ function PerfilPage() {
     } catch {
       // Fallback: si el backend no responde, actualizamos igualmente en localStorage
     } finally {
-      // Guardar en localStorage y reflejar los datos actualizados en pantalla
+      // Guardar en localStorage y reflejar los datos actualizados en vivo
       localStorage.setItem('forza_user', JSON.stringify(perfilActualizado));
       localStorage.setItem('forza_registered_user', JSON.stringify(perfilActualizado));
       setNombre(perfilActualizado.nombre);
       setEmail(perfilActualizado.email);
-      setObjetivo(perfilActualizado.objetivo);
       setGuardando(false);
 
       Swal.fire({
         icon: 'success',
         title: '¡Perfil actualizado!',
-        text: 'Tus datos personales y de entrenamiento se guardaron correctamente.',
+        text: 'Tus datos biométricos y preferencias de entrenamiento se guardaron con éxito.',
         background: '#141414',
         color: '#ffffff',
         confirmButtonColor: '#9EF01A',
@@ -157,8 +179,8 @@ function PerfilPage() {
                 <div className="fs-1 mb-3">🔒</div>
                 <h1 className="h4 fw-bold text-light mb-2">Iniciá sesión para ver tu perfil</h1>
                 <p className="text-secondary mb-4">
-                  Necesitás tener una sesión activa en FORZA para consultar y editar tus datos
-                  personales y objetivos de entrenamiento.
+                  Necesitás tener una sesión activa en FORZA para consultar tu credencial de
+                  atleta, calcular tu IMC y editar tu biometría.
                 </p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
                   <Button as={Link} to="/login" className="forza-btn-primary">
@@ -177,113 +199,137 @@ function PerfilPage() {
   }
 
   return (
-    <Container className="py-2">
-      <Row className="justify-content-center">
-        <Col md={10} lg={7}>
-          <Card className="forza-card">
-            <Card.Body className="p-4">
-              {/* Encabezado dinámico con resumen del usuario */}
-              <div className="text-center mb-4">
+    <Container className="py-3">
+      <div className="mb-4">
+        <h1 className="h3 fw-bold text-light mb-1">⚡ Mi Perfil de Atleta</h1>
+        <p className="text-secondary small mb-0">
+          Consultá tu credencial deportiva, índice de masa corporal (IMC) y configurá tus metas.
+        </p>
+      </div>
+
+      <Row className="g-4">
+        {/* Columna Izquierda (lg={4}): Tarjeta Credencial del Atleta */}
+        <Col lg={4}>
+          <Card className="forza-card text-center">
+            <Card.Body className="p-4 d-flex flex-column justify-content-between h-100">
+              <div>
+                {/* Avatar circular grande con iniciales y borde #9EF01A */}
                 <div
-                  className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                  className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 fw-bold"
                   style={{
-                    width: '90px',
-                    height: '90px',
-                    backgroundColor: 'var(--color-primary-dark)',
-                    border: '2px solid var(--color-primary)',
-                    color: 'var(--color-primary)',
-                    fontSize: '2.5rem',
+                    width: '96px',
+                    height: '96px',
+                    backgroundColor: 'var(--color-primary-dark, #192704)',
+                    border: '2px solid #9EF01A',
+                    color: '#9EF01A',
+                    fontSize: '2rem',
+                    letterSpacing: '1px',
                   }}
                 >
-                  👤
+                  {obtenerIniciales()}
                 </div>
-                <h1 className="h3 fw-bold text-light mb-1">{nombre}</h1>
-                <p className="text-secondary small mb-2">{email}</p>
-                <div className="d-flex justify-content-center gap-2 flex-wrap">
-                  <Badge className="forza-badge">Miembro Activo</Badge>
+
+                <h2 className="h4 fw-bold text-light mb-1">{nombre}</h2>
+                <p className="text-secondary small mb-3">{email}</p>
+
+                {/* Badges con Objetivo actual y Nivel */}
+                <div className="d-flex justify-content-center gap-2 flex-wrap mb-4">
+                  <Badge className="forza-badge">🎯 {objetivo}</Badge>
                   <Badge className="forza-badge">{nivel}</Badge>
                 </div>
+
+                {/* Grilla de 3 cajas pequeñas: Peso, Altura e IMC calculado en vivo */}
+                <Row className="g-2 mb-4">
+                  <Col xs={4}>
+                    <div
+                      className="p-2 rounded border border-secondary"
+                      style={{ backgroundColor: '#0D1114' }}
+                    >
+                      <span className="text-secondary small d-block">Peso</span>
+                      <strong className="text-light">{peso ? `${peso} kg` : '-'}</strong>
+                    </div>
+                  </Col>
+
+                  <Col xs={4}>
+                    <div
+                      className="p-2 rounded border border-secondary"
+                      style={{ backgroundColor: '#0D1114' }}
+                    >
+                      <span className="text-secondary small d-block">Altura</span>
+                      <strong className="text-light">{altura ? `${altura} cm` : '-'}</strong>
+                    </div>
+                  </Col>
+
+                  <Col xs={4}>
+                    <div
+                      className="p-2 rounded"
+                      style={{
+                        backgroundColor: 'var(--color-primary-dark, #192704)',
+                        border: '1px solid #9EF01A',
+                      }}
+                    >
+                      <span className="small d-block" style={{ color: '#9EF01A' }}>
+                        IMC
+                      </span>
+                      <strong style={{ color: '#9EF01A' }}>{calcularIMC()}</strong>
+                    </div>
+                  </Col>
+                </Row>
               </div>
 
-              {/* Resumen rápido en tarjetas pequeñas */}
-              <Row className="g-3 mb-4 text-center border-top border-bottom border-secondary py-3">
-                <Col xs={4}>
-                  <span className="text-secondary small d-block">Peso</span>
-                  <strong className="text-light">{peso ? `${peso} kg` : '-'}</strong>
-                </Col>
-                <Col xs={4}>
-                  <span className="text-secondary small d-block">Altura</span>
-                  <strong className="text-light">{altura ? `${altura} cm` : '-'}</strong>
-                </Col>
-                <Col xs={4}>
-                  <span className="text-secondary small d-block">Nivel</span>
-                  <strong className="text-light">{nivel}</strong>
-                </Col>
-              </Row>
+              {/* Botón inferior de Cerrar Sesión */}
+              <Button
+                type="button"
+                variant="outline-danger"
+                onClick={handleCerrarSesion}
+                className="w-100 fw-bold mt-2"
+              >
+                Cerrar Sesión
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
 
-              {/* Formulario controlado con React Bootstrap para editar los datos */}
+        {/* Columna Derecha (lg={8}): Formulario de Configuración y Biometría */}
+        <Col lg={8}>
+          <Card className="forza-card">
+            <Card.Body className="p-4">
+              <h3 className="h5 fw-bold text-light mb-3 pb-2 border-bottom border-secondary">
+                Configuración Personal y Biometría
+              </h3>
+
               <Form onSubmit={handleGuardarPerfil} noValidate>
-                <Form.Group className="mb-3" controlId="perfilNombre">
-                  <Form.Label className="forza-form-label">Nombre de Usuario</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Tu nombre completo"
-                    className="forza-form-control"
-                    value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="perfilEmail">
-                  <Form.Label className="forza-form-label">Correo Electrónico</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="tu@email.com"
-                    className="forza-form-control"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </Form.Group>
-
                 <Row className="g-3 mb-3">
                   <Col md={6}>
-                    <Form.Group controlId="perfilNivel">
-                      <Form.Label className="forza-form-label">Nivel de Experiencia</Form.Label>
-                      <Form.Select
+                    <Form.Group controlId="perfilNombre">
+                      <Form.Label className="forza-form-label">Nombre Completo</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Tu nombre completo"
                         className="forza-form-control"
-                        value={nivel}
-                        onChange={(e) => setNivel(e.target.value)}
-                      >
-                        <option value="Principiante" className="bg-dark text-light">
-                          Principiante
-                        </option>
-                        <option value="Intermedio" className="bg-dark text-light">
-                          Intermedio
-                        </option>
-                        <option value="Avanzado" className="bg-dark text-light">
-                          Avanzado
-                        </option>
-                      </Form.Select>
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
+                        required
+                      />
                     </Form.Group>
                   </Col>
 
                   <Col md={6}>
-                    <Form.Group controlId="perfilObjetivo">
-                      <Form.Label className="forza-form-label">Objetivo Principal</Form.Label>
+                    <Form.Group controlId="perfilEmail">
+                      <Form.Label className="forza-form-label">Correo Electrónico</Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="Ej. Hipertrofia muscular y fuerza"
+                        type="email"
+                        placeholder="tu@email.com"
                         className="forza-form-control"
-                        value={objetivo}
-                        onChange={(e) => setObjetivo(e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                       />
                     </Form.Group>
                   </Col>
                 </Row>
 
-                <Row className="g-3 mb-4">
+                <Row className="g-3 mb-3">
                   <Col md={6}>
                     <Form.Group controlId="perfilPeso">
                       <Form.Label className="forza-form-label">Peso Corporal (kg)</Form.Label>
@@ -315,38 +361,77 @@ function PerfilPage() {
                   </Col>
                 </Row>
 
-                {/* Botones de Guardar Cambios y Cerrar Sesión */}
-                <div className="d-grid gap-2">
-                  <Button
-                    type="submit"
-                    className="forza-btn-primary w-100 d-flex align-items-center justify-content-center"
-                    disabled={guardando}
-                  >
-                    {guardando ? (
-                      <>
-                        <Spinner
-                          as="span"
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
-                          className="me-2"
-                        />
-                        Guardando cambios...
-                      </>
-                    ) : (
-                      'Actualizar Perfil'
-                    )}
-                  </Button>
+                <Row className="g-3 mb-4">
+                  <Col md={6}>
+                    <Form.Group controlId="perfilNivel">
+                      <Form.Label className="forza-form-label">Nivel de Experiencia</Form.Label>
+                      <Form.Select
+                        className="forza-form-control"
+                        value={nivel}
+                        onChange={(e) => setNivel(e.target.value)}
+                      >
+                        <option value="Principiante" className="bg-dark text-light">
+                          Principiante
+                        </option>
+                        <option value="Intermedio" className="bg-dark text-light">
+                          Intermedio
+                        </option>
+                        <option value="Avanzado" className="bg-dark text-light">
+                          Avanzado
+                        </option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
 
-                  <Button
-                    type="button"
-                    onClick={handleCerrarSesion}
-                    className="forza-btn-secondary w-100 text-danger border-danger"
-                  >
-                    Cerrar Sesión
-                  </Button>
-                </div>
+                  <Col md={6}>
+                    <Form.Group controlId="perfilObjetivo">
+                      <Form.Label className="forza-form-label">Objetivo Principal</Form.Label>
+                      <Form.Select
+                        className="forza-form-control"
+                        value={objetivo}
+                        onChange={(e) => setObjetivo(e.target.value)}
+                      >
+                        <option value="Ganar Masa Muscular" className="bg-dark text-light">
+                          Ganar Masa Muscular
+                        </option>
+                        <option value="Pérdida de Peso" className="bg-dark text-light">
+                          Pérdida de Peso
+                        </option>
+                        <option value="Fuerza y Resistencia" className="bg-dark text-light">
+                          Fuerza y Resistencia
+                        </option>
+                        <option
+                          value="Hipertrofia muscular y fuerza"
+                          className="bg-dark text-light"
+                        >
+                          Hipertrofia muscular y fuerza
+                        </option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                <Button
+                  type="submit"
+                  className="forza-btn-primary w-100 d-flex align-items-center justify-content-center"
+                  disabled={guardando}
+                >
+                  {guardando ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className="me-2"
+                      />
+                      Guardando cambios...
+                    </>
+                  ) : (
+                    'Guardar Cambios del Perfil'
+                  )}
+                </Button>
               </Form>
             </Card.Body>
           </Card>
