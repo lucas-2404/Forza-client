@@ -4,7 +4,6 @@ import { Offcanvas } from 'react-bootstrap';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import Footer from './Footer';
-import './layout.css';
 
 /**
  * Componente Layout Principal (Diseño B: Sidebar lateral + Topbar superior).
