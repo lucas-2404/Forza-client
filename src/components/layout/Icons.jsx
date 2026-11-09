@@ -236,3 +236,24 @@ export function CloseIcon({ size = 20, className = '' }) {
   );
 }
 
+export function AppleIcon({ size = 20, className = '' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Manzana / alimentación */}
+      <path d="M12 2a3 3 0 0 1 3 3" />
+      <path d="M17.5 6C20 6 22 8.5 22 12c0 5-3.5 10-10 10S2 17 2 12C2 8.5 4 6 6.5 6c1.5 0 2.5.5 3.5 1 .5.3 1 .5 2 .5s1.5-.2 2-.5c1-.5 2-1 3.5-1z" />
+    </svg>
+  );
+}
+

@@ -11,6 +11,7 @@ import RutinaPage from '../pages/RutinaPage';
 import PerfilPage from '../pages/PerfilPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import FavoritosPage from '../pages/FavoritosPage';
+import AlimentacionPage from '../pages/AlimentacionPage';
 
 /**
  * Definición centralizada de las Rutas de FORZA.
@@ -36,6 +37,9 @@ function Rutas() {
 
         {/* 5. Favoritos (Destino preparado visualmente sin funcionalidad invasiva) */}
         <Route path="favoritos" element={<FavoritosPage />} />
+
+        {/* 6. Alimentación */}
+        <Route path="alimentacion" element={<AlimentacionPage />} />
 
         {/* Mi Perfil */}
         <Route path="perfil" element={<PerfilPage />} />

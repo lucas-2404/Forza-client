@@ -9,6 +9,7 @@ import {
   HeartIcon,
   UserIcon,
   LogoutIcon,
+  AppleIcon,
 } from './Icons';
 
 // Enlaces principales del Sidebar
@@ -18,6 +19,7 @@ export const mainNavLinks = [
   { name: 'Rutinas', path: '/rutinas', icon: CalendarIcon },
   { name: 'Progreso', path: '/dashboard', icon: ChartIcon },
   { name: 'Favoritos', path: '/favoritos', icon: HeartIcon },
+  { name: 'Alimentación', path: '/alimentacion', icon: AppleIcon },
 ];
 
 // Clases Bootstrap reutilizadas para los enlaces
