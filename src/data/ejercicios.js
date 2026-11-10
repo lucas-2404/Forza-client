@@ -14,6 +14,7 @@ export const ejerciciosIniciales = [
     seriesRecomendadas: 4,
     repeticionesRecomendadas: '8-10',
     icono: '🏋️‍♂️',
+    imagen: '/img/Press-Banca.jpg',
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ export const ejerciciosIniciales = [
     seriesRecomendadas: 4,
     repeticionesRecomendadas: '6-8',
     icono: '🦵',
+    imagen: '/img/Sentadilla.jpg',
   },
   {
     id: 3,
@@ -34,6 +36,7 @@ export const ejerciciosIniciales = [
     seriesRecomendadas: 3,
     repeticionesRecomendadas: '8-12',
     icono: '🧗‍♂️',
+    imagen: '/img/Dominadas-Pronales.jpg',
   },
   {
     id: 4,
@@ -44,6 +47,7 @@ export const ejerciciosIniciales = [
     seriesRecomendadas: 3,
     repeticionesRecomendadas: '10-12',
     icono: '💪',
+    imagen: '/img/Press-Militar-Mancuernas.jpg',
   },
   {
     id: 5,
@@ -54,6 +58,7 @@ export const ejerciciosIniciales = [
     seriesRecomendadas: 3,
     repeticionesRecomendadas: '10-12',
     icono: '⚡',
+    imagen: '/img/Pm-Romano.jpg',
   },
   {
     id: 6,
@@ -64,6 +69,6 @@ export const ejerciciosIniciales = [
     seriesRecomendadas: 3,
     repeticionesRecomendadas: '45-60 seg',
     icono: '⏱️',
+    imagen: '/img/Plancha-Abdominal.jpg',
   },
 ];
-
