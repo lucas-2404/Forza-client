@@ -122,7 +122,7 @@ function EjerciciosPage() {
           </p>
           <Row className="g-4">
             {visibles.map((ejercicio) => (
-              <Col md={6} lg={4} key={ejercicio.id}>
+              <Col xs={12} md={6} lg={4} key={ejercicio.id}>
                 <EjercicioCard
                   ejercicio={ejercicio}
                   esFavorito={esFavorito(ejercicio.id)}
