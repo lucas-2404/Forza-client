@@ -95,13 +95,13 @@ export function ChartIcon({ size = 20, className = '' }) {
   );
 }
 
-export function HeartIcon({ size = 20, className = '' }) {
+export function HeartIcon({ size = 20, className = '', fill = 'none' }) {
   return (
     <svg 
       width={size} 
       height={size} 
       viewBox="0 0 24 24" 
-      fill="none" 
+      fill={fill} 
       stroke="currentColor" 
       strokeWidth="2" 
       strokeLinecap="round" 
