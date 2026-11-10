@@ -1239,7 +1239,301 @@ a:hover {
 }
 
 /* ==========================================================================
-   11. ACCESIBILIDAD (Reducción de movimiento)
+   11. MI PROGRESO — DASHBOARD DE RENDIMIENTO Y ESTADÍSTICAS
+   ========================================================================== */
+
+/* 11.1 Progreso — Hero y Estadísticas */
+.progreso-hero {
+  position: relative;
+  min-height: 220px;
+  background-color: #080B0D;
+  border-radius: var(--radius-lg, 20px);
+  border: 1px solid var(--border-color, #2A3035);
+  overflow: hidden;
+}
+
+.progreso-hero-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  filter: brightness(0.68) contrast(1.18);
+  pointer-events: none;
+}
+
+.progreso-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #080B0D 0%, #080B0D 42%, rgba(8, 11, 13, 0.88) 65%, rgba(8, 11, 13, 0.25) 100%);
+  pointer-events: none;
+}
+
+.progreso-hero-glow {
+  position: absolute;
+  top: 0;
+  right: 25%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(158, 240, 26, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.progreso-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(158, 240, 26, 0.14);
+  color: var(--color-primary);
+  border: 1px solid rgba(158, 240, 26, 0.3);
+  backdrop-filter: blur(4px);
+  border-radius: 9999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.progreso-stat-card {
+  background-color: var(--bg-card, #171C20) !important;
+  border: 1px solid var(--border-color, #2A3035) !important;
+  border-radius: var(--radius-md, 14px) !important;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.progreso-stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(158, 240, 26, 0.45) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+.progreso-stat-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.progreso-stat-wave {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 70px;
+  height: 35px;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* 11.2 Progreso — Gráfico de Entrenamientos por Semana */
+.progreso-chart-card {
+  background-color: var(--bg-card, #171C20);
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: var(--radius-lg, 20px);
+}
+
+.progreso-filter-group {
+  background-color: #11161B;
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: 10px;
+  padding: 3px;
+  display: inline-flex;
+  gap: 2px;
+}
+
+.progreso-filter-btn {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94A3B8;
+  border-radius: 8px !important;
+  border: none !important;
+  background: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.progreso-filter-btn:hover {
+  color: #fff;
+}
+
+.progreso-filter-btn.active {
+  background-color: var(--color-primary, #9EF01A) !important;
+  color: #080B0D !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(158, 240, 26, 0.3);
+}
+
+.progreso-chart-container {
+  position: relative;
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.progreso-chart-grid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.progreso-chart-line {
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  width: 100%;
+}
+
+.progreso-chart-bar {
+  width: 100%;
+  max-width: 42px;
+  background: linear-gradient(to top, rgba(158, 240, 26, 0.25) 0%, var(--color-primary, #9EF01A) 100%);
+  border-radius: 6px 6px 0 0;
+  transition: height 0.4s ease, opacity 0.2s ease;
+}
+
+.progreso-chart-bar:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 12px rgba(158, 240, 26, 0.4);
+}
+
+/* 11.3 Progreso — Objetivo Mensual Circular */
+.progreso-goal-card {
+  position: relative;
+  background-color: var(--bg-card, #171C20);
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: var(--radius-lg, 20px);
+  overflow: hidden;
+}
+
+.progreso-goal-bg-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.progreso-goal-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #171C20 0%, #171C20 55%, rgba(23, 28, 32, 0.7) 100%);
+  pointer-events: none;
+}
+
+/* 11.4 Progreso — Logros */
+.progreso-logro-card {
+  border-radius: 14px;
+  padding: 1rem;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.progreso-logro-card.is-unlocked {
+  background: rgba(158, 240, 26, 0.04) !important;
+  border: 1px solid rgba(158, 240, 26, 0.45) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(158, 240, 26, 0.08);
+}
+
+.progreso-logro-card.is-unlocked:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary) !important;
+}
+
+.progreso-logro-card.is-locked {
+  background: #11161B !important;
+  border: 1px solid var(--border-color, #2A3035) !important;
+  opacity: 0.7;
+}
+
+.progreso-logro-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* 11.5 Progreso — Racha y Sesiones Recientes */
+.progreso-streak-card {
+  position: relative;
+  background-color: #080B0D;
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: var(--radius-lg, 20px);
+  overflow: hidden;
+  padding: 1.25rem 1.5rem;
+}
+
+.progreso-streak-bg-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.progreso-streak-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #080B0D 0%, #080B0D 50%, rgba(8, 11, 13, 0.7) 100%);
+  pointer-events: none;
+}
+
+.progreso-recent-item {
+  background-color: #11161B;
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.progreso-recent-item:hover {
+  transform: translateX(2px);
+  border-color: rgba(158, 240, 26, 0.35);
+}
+
+/* 11.6 Progreso — Últimas Sesiones Registradas */
+.progreso-session-row {
+  background-color: var(--bg-card, #171C20);
+  border: 1px solid var(--border-color, #2A3035);
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.progreso-session-row:hover {
+  transform: translateX(3px);
+  border-color: rgba(158, 240, 26, 0.4);
+}
+
+.progreso-session-thumb {
+  width: 48px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #080B0D;
+  border: 1px solid var(--border-color, #2A3035);
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   12. ACCESIBILIDAD (Reducción de movimiento)
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
 
@@ -1270,7 +1564,13 @@ a:hover {
   .rutina-historial-row,
   .rutina-form-day-btn,
   .rutina-detalle-day-item,
-  .rutina-detalle-exercise-card {
+  .rutina-detalle-exercise-card,
+  .progreso-stat-card,
+  .progreso-filter-btn,
+  .progreso-chart-bar,
+  .progreso-logro-card,
+  .progreso-recent-item,
+  .progreso-session-row {
     transition: none !important;
     transform: none !important;
   }
