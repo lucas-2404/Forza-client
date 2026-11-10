@@ -10,6 +10,7 @@ import {
   Card,
 } from 'react-bootstrap';
 import { ejerciciosIniciales } from '../../data/ejercicios';
+import { obtenerImagenEjercicio } from '../../services/rutinasService';
 
 /**
  * Modal para seleccionar ejercicios del catálogo existente.
@@ -100,8 +101,31 @@ function ModalAgregarEjercicio({ show, onClose, onAgregar, diaActual }) {
                 }`}
                 style={activo ? { borderLeft: '4px solid var(--color-primary)' } : {}}
               >
-                <div className="d-flex align-items-center gap-2">
-                  <span className="fs-5">{ej.icono}</span>
+                <div className="d-flex align-items-center gap-3">
+                  <div
+                    className="rounded-2 overflow-hidden border border-secondary flex-shrink-0"
+                    style={{ width: '40px', height: '40px', backgroundColor: '#080B0D' }}
+                  >
+                    <img
+                      src={ej.imagen || obtenerImagenEjercicio(ej)}
+                      alt={ej.nombre}
+                      loading="lazy"
+                      className="w-100 h-100"
+                      style={{ objectFit: 'cover' }}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        if (e.currentTarget.nextSibling) {
+                          e.currentTarget.nextSibling.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <div
+                      className="w-100 h-100 align-items-center justify-content-center text-secondary"
+                      style={{ display: 'none', fontSize: '1.2rem' }}
+                    >
+                      {ej.icono}
+                    </div>
+                  </div>
                   <div>
                     <div className="fw-semibold small text-light">{ej.nombre}</div>
                     <small className="text-secondary">{ej.grupoMuscular}</small>

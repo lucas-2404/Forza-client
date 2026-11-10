@@ -15,6 +15,7 @@ import AlimentacionPage from '../pages/AlimentacionPage';
 
 // Páginas del módulo de Rutinas (feature/rutinas)
 import FormularioRutinaPage from '../pages/FormularioRutinaPage';
+import RutinaDetallePage from '../pages/RutinaDetallePage';
 
 /**
  * Definición centralizada de las Rutas de FORZA.
@@ -35,6 +36,8 @@ function Rutas() {
         <Route path="rutinas" element={<RutinaPage />} />
         <Route path="rutinas/nueva" element={<FormularioRutinaPage />} />
         <Route path="rutinas/editar/:id" element={<FormularioRutinaPage />} />
+        {/* Detalle de rutina — va DESPUÉS de las rutas específicas para evitar conflictos */}
+        <Route path="rutinas/:id" element={<RutinaDetallePage />} />
 
         {/* 4. Progreso / Dashboard */}
         <Route path="dashboard" element={<DashboardPage />} />

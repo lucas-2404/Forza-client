@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <radialGradient id="ejBg9" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#241e12" />
+      <stop offset="100%" stop-color="#080B0D" />
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="16" fill="url(#ejBg9)" stroke="#2A3035" stroke-width="1.5" />
+  <!-- Step / Platform block -->
+  <rect x="24" y="96" width="72" height="12" rx="2" fill="#27272a" stroke="#52525b" stroke-width="1.5" />
+  <!-- Calves standing on tiptoes (Elevated heels) -->
+  <!-- Left Leg -->
+  <line x1="46" y1="36" x2="46" y2="60" stroke="#71717a" stroke-width="6" stroke-linecap="round" />
+  <!-- Calf Gastrocnemius muscle (Lime green highlight) -->
+  <ellipse cx="46" cy="68" rx="6" ry="10" fill="#9EF01A" />
+  <line x1="46" y1="78" x2="46" y2="92" stroke="#9EF01A" stroke-width="4.5" />
+  <!-- Foot flexed on tiptoe -->
+  <path d="M46 92 L46 96 L40 96" stroke="#eab308" stroke-width="4" stroke-linecap="round" fill="none" />
+
+  <!-- Right Leg -->
+  <line x1="68" y1="36" x2="68" y2="60" stroke="#71717a" stroke-width="6" stroke-linecap="round" />
+  <!-- Calf Gastrocnemius muscle (Lime green highlight) -->
+  <ellipse cx="68" cy="68" rx="6" ry="10" fill="#9EF01A" />
+  <line x1="68" y1="78" x2="68" y2="92" stroke="#9EF01A" stroke-width="4.5" />
+  <!-- Foot flexed on tiptoe -->
+  <path d="M68 92 L68 96 L62 96" stroke="#eab308" stroke-width="4" stroke-linecap="round" fill="none" />
+  <!-- Tag -->
+  <rect x="56" y="8" width="56" height="15" rx="4" fill="rgba(234, 179, 8, 0.15)" stroke="#eab308" stroke-width="0.8" />
+  <text x="84" y="19" text-anchor="middle" fill="#eab308" font-size="7.5" font-weight="bold" font-family="sans-serif">PANTORRILLA</text>
+</svg>
+
