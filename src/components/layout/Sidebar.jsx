@@ -5,12 +5,10 @@ import NavigationItems from './NavigationItems';
 /**
  * Componente Sidebar Lateral (Diseño B de FORZA).
  *
- * Muestra el logotipo con la mancuerna verde lima, el menú de navegación principal
- * y la sección inferior con perfil y cierre de sesión.
- *
- * @param {Function} onItemClick - Callback opcional para cerrar el menú en móviles (Offcanvas).
- * @param {Function} onLogout - Callback opcional para el futuro servicio de logout.
- * @param {string} className - Clases CSS adicionales.
+ * Refactorizado al 90 % Bootstrap:
+ * - Estructura flexbox con `flex-column`.
+ * - Encabezado alineado con `d-flex align-items-center px-4 border-bottom border-secondary`.
+ * - Enlace del logo con utilidades `d-inline-flex align-items-center gap-2 text-decoration-none`.
  */
 function Sidebar({ onItemClick, onLogout, className = '' }) {
   const handleLogoClick = () => {
@@ -20,14 +18,14 @@ function Sidebar({ onItemClick, onLogout, className = '' }) {
   };
 
   return (
-    <aside className={`forza-sidebar ${className}`} aria-label="Barra lateral de navegación">
+    <aside className={`forza-sidebar flex-column ${className}`} aria-label="Barra lateral de navegación">
       {/* Encabezado con Logotipo FORZA */}
-      <div className="sidebar-header">
-        <Link to="/" className="sidebar-brand" onClick={handleLogoClick}>
-          <span className="sidebar-brand-icon" aria-hidden="true">
+      <div className="sidebar-header d-flex align-items-center px-4 border-bottom border-secondary">
+        <Link to="/" className="d-inline-flex align-items-center gap-2 text-decoration-none text-white" onClick={handleLogoClick}>
+          <span className="sidebar-brand-icon d-flex" aria-hidden="true">
             <DumbbellIcon size={28} />
           </span>
-          <span className="sidebar-brand-text">FORZA</span>
+          <span className="sidebar-brand-text fw-bold fs-4">FORZA</span>
         </Link>
       </div>
 
@@ -38,4 +36,3 @@ function Sidebar({ onItemClick, onLogout, className = '' }) {
 }
 
 export default Sidebar;
-
