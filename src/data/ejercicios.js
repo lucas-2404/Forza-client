@@ -1,4 +1,3 @@
-
 /**
  * Datos iniciales de ejemplo para ejercicios de entrenamiento.
  * Este archivo permite trabajar con datos simulados (mock data)
@@ -14,8 +13,7 @@ export const ejerciciosIniciales = [
         dificultad: 'Intermedio',
         seriesRecomendadas: 4,
         repeticionesRecomendadas: '8-10',
-        icono: '🏋️‍♂️',
-        imagen: '/img/Press-Banca.jpg',
+        imagenFondo: '/img/ejercicios/press-banca-fondo.webp',
     },
     {
         id: 2,
@@ -25,8 +23,7 @@ export const ejerciciosIniciales = [
         dificultad: 'Avanzado',
         seriesRecomendadas: 4,
         repeticionesRecomendadas: '6-8',
-        icono: '🦵',
-        imagen: '/img/Sentadilla.jpg',
+        imagenFondo: '/img/ejercicios/sentadilla-fondo.webp',
     },
     {
         id: 3,
@@ -36,8 +33,7 @@ export const ejerciciosIniciales = [
         dificultad: 'Intermedio',
         seriesRecomendadas: 3,
         repeticionesRecomendadas: '8-12',
-        icono: '🧗‍♂️',
-        imagen: '/img/Dominadas-Pronales.jpg',
+        imagenFondo: '/img/ejercicios/dominadas-fondo.webp',
     },
     {
         id: 4,
@@ -47,8 +43,7 @@ export const ejerciciosIniciales = [
         dificultad: 'Principiante',
         seriesRecomendadas: 3,
         repeticionesRecomendadas: '10-12',
-        icono: '💪',
-        imagen: '/img/Press-Militar-Mancuernas.jpg',
+        imagenFondo: '/img/ejercicios/press-militar-fondo.webp',
     },
     {
         id: 5,
@@ -58,8 +53,7 @@ export const ejerciciosIniciales = [
         dificultad: 'Intermedio',
         seriesRecomendadas: 3,
         repeticionesRecomendadas: '10-12',
-        icono: '⚡',
-        imagen: '/img/Pm-Romano.jpg',
+        imagenFondo: '/img/ejercicios/peso-muerto-rumano-fondo.webp',
     },
     {
         id: 6,
@@ -69,7 +63,6 @@ export const ejerciciosIniciales = [
         dificultad: 'Principiante',
         seriesRecomendadas: 3,
         repeticionesRecomendadas: '45-60 seg',
-        icono: '⏱️',
-        imagen: '/img/Plancha-Abdominal.jpg',
+        imagenFondo: '/img/ejercicios/plancha-abdominal-fondo.webp',
     },
 ];
