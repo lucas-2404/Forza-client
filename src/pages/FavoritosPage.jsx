@@ -68,7 +68,7 @@ function FavoritosPage() {
             {!estaCargando && !error && favoritos.length > 0 && (
                 <Row className="g-4">
                     {favoritos.map((ejercicio) => (
-                        <Col md={6} lg={4} key={ejercicio.id}>
+                        <Col xs={12} md={6} lg={4} key={ejercicio.id}>
                             <EjercicioCard
                                 ejercicio={ejercicio}
                                 esFavorito
