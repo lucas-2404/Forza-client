@@ -6,9 +6,7 @@ import {
   Card,
   Form,
   Button,
-  Badge,
   Spinner,
-  ButtonGroup,
 } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -19,6 +17,7 @@ import {
   actualizarRutina,
   obtenerImagenEjercicio,
 } from '../services/rutinasService';
+import { EditIcon, TrashIcon } from '../components/layout/Icons';
 
 const DIAS = [
   { id: 'lunes', label: 'Lun' },
@@ -39,8 +38,10 @@ const OBJETIVOS = [
 ];
 
 /**
- * Pantalla 2 — Crear o editar rutina semanal.
- * Desarrollada con 90% componentes y utilidades nativas de Bootstrap.
+ * FormularioRutinaPage.jsx — Pantalla de Crear / Editar Rutina (Diseño Premium FORZA).
+ * Diseño de 2 columnas:
+ * - Columna Izquierda: 1. Datos básicos (Nombre, Objetivo, Dificultad, Días)
+ * - Columna Derecha: 2. Ejercicios del día (Selector de días, Listado o Empty State elegante)
  */
 function FormularioRutinaPage() {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ function FormularioRutinaPage() {
 
   const [nombre, setNombre] = useState('');
   const [objetivo, setObjetivo] = useState(OBJETIVOS[0]);
-  const [nivel, setNivel] = useState('Principiante'); // Principiante | Intermedio | Avanzado
+  const [nivel, setNivel] = useState('Principiante');
   const [diasSeleccionados, setDiasSeleccionados] = useState(['lunes', 'miercoles', 'viernes']);
   const [diaActivo, setDiaActivo] = useState('lunes');
   const [ejerciciosPorDia, setEjerciciosPorDia] = useState({});
@@ -76,11 +77,16 @@ function FormularioRutinaPage() {
   const toggleDia = (diaId) => {
     setDiasSeleccionados((prev) => {
       if (prev.includes(diaId)) {
-        return prev.filter((d) => d !== diaId);
+        const filtrado = prev.filter((d) => d !== diaId);
+        if (diaActivo === diaId && filtrado.length > 0) {
+          setDiaActivo(filtrado[0]);
+        }
+        return filtrado;
       }
-      return [...prev, diaId];
+      const nuevo = [...prev, diaId];
+      setDiaActivo(diaId);
+      return nuevo;
     });
-    setDiaActivo(diaId);
   };
 
   const handleAgregarEjercicio = (ejercicio) => {
@@ -171,12 +177,11 @@ function FormularioRutinaPage() {
       diasGuardar[dia] = ejerciciosPorDia[dia] || [];
     });
 
-    // Derivar grupos musculares automáticamente de los ejercicios seleccionados
     const grupos = [
       ...new Set(
         Object.values(diasGuardar)
           .flat()
-          .map((e) => e.grupoMuscular)
+          .map((e) => e?.grupoMuscular)
           .filter(Boolean)
       ),
     ];
@@ -186,7 +191,7 @@ function FormularioRutinaPage() {
       objetivo,
       nivel,
       grupos,
-      duracionMin: 45, // duración estimada por defecto
+      duracionMin: 45,
       diasSeleccionados,
       dias: diasGuardar,
     };
@@ -217,47 +222,64 @@ function FormularioRutinaPage() {
 
   return (
     <Container className="py-3">
-      {/* Encabezado con utilidades Bootstrap */}
-      <div className="mb-4">
-        <span 
-          className="text-secondary small text-decoration-none" 
-          role="button" 
+      {/* ─── ENCABEZADO CON NAVEGACIÓN Y FOTOGRAFÍA SUPERIOR ────────────────── */}
+      <div className="position-relative overflow-hidden mb-4 pb-2">
+        <button
+          type="button"
+          className="btn btn-link text-secondary small p-0 mb-2 text-decoration-none d-flex align-items-center gap-1"
           onClick={() => navigate('/rutinas')}
         >
-          ← Volver a Rutinas
-        </span>
-        <h1 className="h2 fw-bold text-light mt-1 mb-1">
-          {esEdicion ? 'Editar rutina' : 'Crear nueva rutina'}
-        </h1>
-        <p className="text-secondary small mb-0">
-          Armá tu rutina semanal seleccionando los ejercicios.
-        </p>
+          <span>←</span>
+          <span>Volver a Rutinas</span>
+        </button>
+
+        <Row className="align-items-center">
+          <Col md={8} lg={7}>
+            <h1 className="display-6 fw-bold text-white mb-1">
+              {esEdicion ? 'Editar' : 'Crear nueva'}{' '}
+              <span style={{ color: 'var(--color-primary)' }}>rutina</span>
+            </h1>
+            <p className="text-secondary small mb-0">
+              Armá tu rutina semanal seleccionando los ejercicios, días y objetivo.
+            </p>
+          </Col>
+        </Row>
       </div>
 
+      {/* ─── CUERPO EN 2 COLUMNAS ───────────────────────────────────────────── */}
       <Row className="g-4">
-        {/* Columna 1: Datos básicos y días */}
-        <Col lg={5}>
-          <Card className="forza-card border-secondary">
-            <Card.Body className="p-4">
-              <h5 className="fw-bold text-light mb-3">1. Datos básicos</h5>
+        {/* Columna Izquierda: 1. Datos básicos */}
+        <Col xs={12} lg={5}>
+          <Card className="rutina-card h-100 shadow-sm">
+            <Card.Body className="p-4 d-flex flex-column">
+              <h5 className="fw-bold mb-1" style={{ color: 'var(--color-primary)' }}>
+                1. Datos básicos
+              </h5>
+              <p className="text-secondary small mb-3">
+                Definí la información principal de tu rutina.
+              </p>
 
               <Form.Group className="mb-3">
-                <Form.Label className="small text-secondary">Nombre de la rutina</Form.Label>
+                <Form.Label className="small text-secondary fw-semibold">
+                  Nombre de la rutina
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Ej: Hipertrofia o Fuerza"
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
-                  className="bg-black text-light border-secondary"
+                  className="bg-black text-light border-secondary py-2"
                 />
               </Form.Group>
 
-              <Form.Group className="mb-4">
-                <Form.Label className="small text-secondary">Objetivo</Form.Label>
+              <Form.Group className="mb-3">
+                <Form.Label className="small text-secondary fw-semibold">
+                  Objetivo
+                </Form.Label>
                 <Form.Select
                   value={objetivo}
                   onChange={(e) => setObjetivo(e.target.value)}
-                  className="bg-black text-light border-secondary"
+                  className="bg-black text-light border-secondary py-2"
                 >
                   {OBJETIVOS.map((obj) => (
                     <option key={obj} value={obj}>
@@ -267,13 +289,14 @@ function FormularioRutinaPage() {
                 </Form.Select>
               </Form.Group>
 
-              {/* Selector de nivel de dificultad */}
               <Form.Group className="mb-4">
-                <Form.Label className="small text-secondary">Nivel de dificultad</Form.Label>
+                <Form.Label className="small text-secondary fw-semibold">
+                  Nivel de dificultad
+                </Form.Label>
                 <Form.Select
                   value={nivel}
                   onChange={(e) => setNivel(e.target.value)}
-                  className="bg-black text-light border-secondary"
+                  className="bg-black text-light border-secondary py-2"
                 >
                   <option value="Principiante">🟢 Principiante</option>
                   <option value="Intermedio">🟡 Intermedio</option>
@@ -281,25 +304,23 @@ function FormularioRutinaPage() {
                 </Form.Select>
               </Form.Group>
 
-              {/* Selector de días semanales con ButtonGroup de Bootstrap */}
+              {/* Selector de días de entrenamiento */}
               <div>
-                <Form.Label className="small text-secondary d-block mb-2">
+                <Form.Label className="small text-secondary fw-semibold d-block mb-2">
                   Días de entrenamiento
                 </Form.Label>
-                <div className="d-flex flex-wrap gap-1">
+                <div className="d-flex flex-wrap gap-2">
                   {DIAS.map((dia) => {
                     const seleccionado = diasSeleccionados.includes(dia.id);
                     return (
-                      <Button
+                      <button
                         key={dia.id}
-                        size="sm"
-                        variant={seleccionado ? 'success' : 'outline-secondary'}
-                        className={`px-3 py-1 fw-bold ${seleccionado ? 'text-dark' : 'text-light border-secondary'}`}
-                        style={seleccionado ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)' } : {}}
+                        type="button"
+                        className={`rutina-form-day-btn ${seleccionado ? 'is-selected' : ''}`}
                         onClick={() => toggleDia(dia.id)}
                       >
                         {dia.label}
-                      </Button>
+                      </button>
                     );
                   })}
                 </div>
@@ -308,33 +329,21 @@ function FormularioRutinaPage() {
           </Card>
         </Col>
 
-        {/* Columna 2: Ejercicios del día */}
-        <Col lg={7}>
-          <Card className="forza-card border-secondary">
-            <Card.Body className="p-4">
+        {/* Columna Derecha: 2. Ejercicios del día */}
+        <Col xs={12} lg={7}>
+          <Card className="rutina-card h-100 shadow-sm">
+            <Card.Body className="p-4 d-flex flex-column">
               <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                 <div>
-                  <h5 className="fw-bold text-light mb-0">2. Ejercicios del día</h5>
-                  {/* Selector de día activo mediante botones compactos */}
-                  {diasSeleccionados.length > 0 && (
-                    <div className="d-flex flex-wrap gap-1 mt-2">
-                      {DIAS.filter((d) => diasSeleccionados.includes(d.id)).map((d) => (
-                        <Button
-                          key={d.id}
-                          size="sm"
-                          variant={diaActivo === d.id ? 'primary' : 'outline-secondary'}
-                          className={`btn-sm py-0 px-2 small ${diaActivo === d.id ? 'forza-btn-primary' : 'text-secondary border-secondary'}`}
-                          onClick={() => setDiaActivo(d.id)}
-                        >
-                          {d.label} ({ejerciciosPorDia[d.id]?.length || 0})
-                        </Button>
-                      ))}
-                    </div>
-                  )}
+                  <h5 className="fw-bold mb-1" style={{ color: 'var(--color-primary)' }}>
+                    2. Ejercicios del día
+                  </h5>
+                  <p className="text-secondary small mb-0">
+                    Agregá los ejercicios por día y organizá tu rutina semanal.
+                  </p>
                 </div>
-
                 <Button
-                  className="forza-btn-primary btn-sm"
+                  className="forza-btn-primary btn-sm fw-bold"
                   onClick={() => setShowModal(true)}
                   disabled={diasSeleccionados.length === 0}
                 >
@@ -342,86 +351,120 @@ function FormularioRutinaPage() {
                 </Button>
               </div>
 
-              {/* Lista de ejercicios con tarjetas nativas de Bootstrap */}
+              {/* Selector de días con conteo */}
+              <div className="d-flex flex-wrap gap-1 mb-3">
+                {DIAS.map((d) => {
+                  const estaSeleccionado = diasSeleccionados.includes(d.id);
+                  const activo = diaActivo === d.id;
+                  const count = ejerciciosPorDia[d.id]?.length || 0;
+
+                  return (
+                    <button
+                      key={d.id}
+                      type="button"
+                      disabled={!estaSeleccionado}
+                      className={`rutina-form-day-btn small py-1 px-2 ${
+                        activo && estaSeleccionado
+                          ? 'is-selected'
+                          : !estaSeleccionado
+                          ? 'opacity-25'
+                          : ''
+                      }`}
+                      onClick={() => setDiaActivo(d.id)}
+                    >
+                      {d.label} ({count})
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Contenido de la columna derecha */}
               {diasSeleccionados.length === 0 ? (
-                <div className="text-center py-5 border border-dashed border-secondary rounded">
-                  <p className="text-secondary small mb-0">Seleccioná al menos un día en el panel izquierdo.</p>
+                <div className="rutina-form-empty-card my-auto">
+                  <p className="text-secondary small mb-0">
+                    Seleccioná al menos un día en el panel izquierdo para comenzar.
+                  </p>
                 </div>
               ) : ejerciciosActuales.length === 0 ? (
-                <div className="text-center py-5 border border-dashed border-secondary rounded">
-                  <span className="fs-2 mb-2 d-block">🏋️‍♂️</span>
-                  <p className="text-secondary small mb-2">No hay ejercicios para el día seleccionado ({nombreDiaActivo}).</p>
-                  <Button
-                    variant="outline-secondary"
-                    size="sm"
-                    className="border-secondary text-light"
-                    onClick={() => setShowModal(true)}
-                  >
-                    + Agregar el primer ejercicio
-                  </Button>
+                /* Estado vacío elegante con fotografía de gimnasio */
+                <div className="rutina-form-empty-card my-auto">
+                  <img
+                    src="/img/hero-gym.webp"
+                    alt=""
+                    aria-hidden="true"
+                    className="rutina-form-empty-img"
+                  />
+                  <div className="position-relative z-1">
+                    <h5 className="fw-bold text-white mb-2">
+                      Todavía no agregaste{' '}
+                      <span style={{ color: 'var(--color-primary)' }}>ejercicios</span>
+                    </h5>
+                    <p className="text-secondary small mb-4 col-md-10 mx-auto">
+                      Comenzá a construir tu rutina para el {nombreDiaActivo}. Agregá ejercicios y definí series, repeticiones y descansos.
+                    </p>
+                    <Button
+                      className="forza-btn-primary btn-sm fw-bold px-4"
+                      onClick={() => setShowModal(true)}
+                    >
+                      + Agregar el primer ejercicio
+                    </Button>
+                  </div>
                 </div>
               ) : (
-                <div className="d-flex flex-column gap-2">
+                /* Lista de ejercicios agregados */
+                <div className="d-flex flex-column gap-2 overflow-auto" style={{ maxHeight: '420px' }}>
                   {ejerciciosActuales.map((ej, index) => (
                     <div
                       key={index}
-                      className="d-flex align-items-center justify-content-between p-2 px-3 bg-black rounded border border-secondary"
+                      className="d-flex align-items-center justify-content-between p-2 px-3 rounded-3 border border-secondary"
+                      style={{ backgroundColor: '#0D1114' }}
                     >
                       <div className="d-flex align-items-center gap-3">
                         <div
                           className="rounded-2 overflow-hidden border border-secondary flex-shrink-0"
-                          style={{ width: '38px', height: '38px', backgroundColor: '#0D1114' }}
+                          style={{ width: '42px', height: '42px', backgroundColor: '#080B0D' }}
                         >
                           <img
-                            src={ej.imagen || obtenerImagenEjercicio(ej)}
+                            src={ej.imagenFondo || ej.imagen || obtenerImagenEjercicio(ej)}
                             alt={ej.nombre}
                             loading="lazy"
-                            className="w-100 h-100"
-                            style={{ objectFit: 'cover' }}
+                            className="w-100 h-100 object-fit-cover"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
-                              if (e.currentTarget.nextSibling) {
-                                e.currentTarget.nextSibling.style.display = 'flex';
-                              }
                             }}
                           />
-                          <div
-                            className="w-100 h-100 align-items-center justify-content-center text-secondary"
-                            style={{ display: 'none', fontSize: '1.2rem' }}
-                          >
-                            {ej.icono || '💪'}
-                          </div>
                         </div>
                         <div>
                           <div className="fw-bold small text-light">{ej.nombre}</div>
                           <div className="text-secondary" style={{ fontSize: '0.8rem' }}>
-                            <span style={{ color: 'var(--color-primary)' }}>{ej.series} series</span> × {ej.repeticiones} reps
+                            <span style={{ color: 'var(--color-primary)' }}>
+                              {ej.series} series
+                            </span>{' '}
+                            × {ej.repeticiones} reps
                           </div>
                         </div>
                       </div>
 
                       <div className="d-flex align-items-center gap-2">
-                        <Badge bg="dark" className="text-secondary border border-secondary d-none d-sm-inline">
+                        <span className="rutina-muscle-badge d-none d-sm-inline">
                           {ej.grupoMuscular}
-                        </Badge>
-                        <Button
-                          variant="outline-secondary"
-                          size="sm"
-                          className="px-2 py-1 text-light border-secondary"
+                        </span>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-outline-secondary text-secondary p-1 px-2 border-secondary"
                           onClick={() => handleEditarEjercicio(index)}
                           title="Editar series y repeticiones"
                         >
-                          ✏️
-                        </Button>
-                        <Button
-                          variant="outline-danger"
-                          size="sm"
-                          className="px-2 py-1"
+                          <EditIcon size={14} />
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-outline-danger p-1 px-2"
                           onClick={() => handleEliminarEjercicio(index)}
                           title="Quitar ejercicio"
                         >
-                          ✕
-                        </Button>
+                          <TrashIcon size={14} />
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -432,13 +475,27 @@ function FormularioRutinaPage() {
         </Col>
       </Row>
 
-      {/* Acciones finales */}
+      {/* ─── ACCIONES INFERIORES ─────────────────────────────────────────────── */}
       <div className="d-flex justify-content-end gap-2 mt-4">
-        <Button variant="outline-secondary" onClick={() => navigate('/rutinas')}>
+        <Button
+          variant="outline-secondary"
+          className="border-secondary text-light px-4"
+          onClick={() => navigate('/rutinas')}
+        >
           Cancelar
         </Button>
-        <Button className="forza-btn-primary" onClick={handleGuardar} disabled={cargando}>
-          {cargando ? <Spinner size="sm" /> : esEdicion ? 'Actualizar rutina' : 'Guardar rutina'}
+        <Button
+          className="forza-btn-primary fw-bold px-4"
+          onClick={handleGuardar}
+          disabled={cargando}
+        >
+          {cargando ? (
+            <Spinner size="sm" />
+          ) : esEdicion ? (
+            'Actualizar rutina'
+          ) : (
+            'Guardar rutina'
+          )}
         </Button>
       </div>
 

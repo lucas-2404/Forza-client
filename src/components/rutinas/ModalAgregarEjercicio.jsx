@@ -5,16 +5,17 @@ import {
   Form,
   Row,
   Col,
-  Badge,
   ListGroup,
   Card,
 } from 'react-bootstrap';
 import { ejerciciosIniciales } from '../../data/ejercicios';
 import { obtenerImagenEjercicio } from '../../services/rutinasService';
+import { SearchIcon, DumbbellIcon } from '../layout/Icons';
 
 /**
- * Modal para seleccionar ejercicios del catálogo existente.
- * Utiliza 100% clases y componentes de React Bootstrap.
+ * ModalAgregarEjercicio.jsx
+ * Modal para seleccionar ejercicios del catálogo.
+ * Utiliza 90% React Bootstrap y fotografía de ejercicios sin emojis.
  */
 function ModalAgregarEjercicio({ show, onClose, onAgregar, diaActual }) {
   const [busqueda, setBusqueda] = useState('');
@@ -67,28 +68,31 @@ function ModalAgregarEjercicio({ show, onClose, onAgregar, diaActual }) {
       onHide={handleClose}
       centered
       size="lg"
-      contentClassName="bg-dark text-light border border-secondary"
+      contentClassName="bg-dark text-light border border-secondary shadow-lg"
     >
-      <Modal.Header closeButton closeVariant="white" className="border-secondary">
+      <Modal.Header closeButton closeVariant="white" className="border-secondary pb-3">
         <Modal.Title className="h5 fw-bold">
           Agregar ejercicio a <span style={{ color: 'var(--color-primary)' }}>{diaActual}</span>
         </Modal.Title>
       </Modal.Header>
 
       <Modal.Body className="p-4">
-        {/* Buscador nativo con Form.Control de Bootstrap */}
-        <Form.Group className="mb-3">
+        {/* Buscador nativo con Form.Control */}
+        <div className="position-relative mb-3">
           <Form.Control
-            type="text"
-            placeholder="🔍 Buscar por nombre o grupo (ej: Pecho, Sentadilla)..."
+            type="search"
+            placeholder="Buscar ejercicio por nombre o grupo (ej: Pecho, Sentadilla)..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            className="bg-black text-light border-secondary"
+            className="bg-black text-light border-secondary ps-4"
           />
-        </Form.Group>
+        </div>
 
-        {/* Lista de ejercicios con ListGroup de Bootstrap */}
-        <ListGroup className="border border-secondary rounded overflow-auto mb-3" style={{ maxHeight: '220px' }}>
+        {/* Lista de ejercicios del catálogo */}
+        <ListGroup
+          className="border border-secondary rounded overflow-auto mb-3"
+          style={{ maxHeight: '240px' }}
+        >
           {ejerciciosFiltrados.map((ej) => {
             const activo = ejercicioSeleccionado?.id === ej.id;
             return (
@@ -104,46 +108,36 @@ function ModalAgregarEjercicio({ show, onClose, onAgregar, diaActual }) {
                 <div className="d-flex align-items-center gap-3">
                   <div
                     className="rounded-2 overflow-hidden border border-secondary flex-shrink-0"
-                    style={{ width: '40px', height: '40px', backgroundColor: '#080B0D' }}
+                    style={{ width: '44px', height: '44px', backgroundColor: '#080B0D' }}
                   >
                     <img
-                      src={ej.imagen || obtenerImagenEjercicio(ej)}
+                      src={ej.imagenFondo || ej.imagen || obtenerImagenEjercicio(ej)}
                       alt={ej.nombre}
                       loading="lazy"
-                      className="w-100 h-100"
-                      style={{ objectFit: 'cover' }}
+                      className="w-100 h-100 object-fit-cover"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
-                        if (e.currentTarget.nextSibling) {
-                          e.currentTarget.nextSibling.style.display = 'flex';
-                        }
                       }}
                     />
-                    <div
-                      className="w-100 h-100 align-items-center justify-content-center text-secondary"
-                      style={{ display: 'none', fontSize: '1.2rem' }}
-                    >
-                      {ej.icono}
-                    </div>
                   </div>
                   <div>
                     <div className="fw-semibold small text-light">{ej.nombre}</div>
                     <small className="text-secondary">{ej.grupoMuscular}</small>
                   </div>
                 </div>
-                <Badge bg="black" className="text-secondary border border-secondary small">
+                <span className="rutina-muscle-badge">
                   {ej.dificultad}
-                </Badge>
+                </span>
               </ListGroup.Item>
             );
           })}
         </ListGroup>
 
-        {/* Configuración de series y repeticiones dentro de Card Bootstrap */}
+        {/* Configuración de series y repeticiones */}
         {ejercicioSeleccionado && (
           <Card body className="bg-black border-secondary p-3">
             <div className="d-flex align-items-center gap-2 mb-2">
-              <span className="fs-5">{ejercicioSeleccionado.icono}</span>
+              <DumbbellIcon size={18} className="text-success" />
               <strong className="text-light">{ejercicioSeleccionado.nombre}</strong>
             </div>
             <Row className="g-2">
@@ -176,7 +170,7 @@ function ModalAgregarEjercicio({ show, onClose, onAgregar, diaActual }) {
           Cancelar
         </Button>
         <Button
-          className="forza-btn-primary"
+          className="forza-btn-primary fw-bold"
           onClick={handleConfirmar}
           disabled={!ejercicioSeleccionado}
         >
