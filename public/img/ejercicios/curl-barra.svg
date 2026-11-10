@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <radialGradient id="ejBg8" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#14221a" />
+      <stop offset="100%" stop-color="#080B0D" />
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="16" fill="url(#ejBg8)" stroke="#2A3035" stroke-width="1.5" />
+  <!-- Athlete Head -->
+  <circle cx="60" cy="30" r="7" fill="#71717a" />
+  <!-- Torso standing straight -->
+  <line x1="60" y1="38" x2="60" y2="76" stroke="#71717a" stroke-width="8" stroke-linecap="round" />
+  <!-- Legs standing -->
+  <line x1="56" y1="76" x2="52" y2="108" stroke="#52525b" stroke-width="5" stroke-linecap="round" />
+  <line x1="64" y1="76" x2="68" y2="108" stroke="#52525b" stroke-width="5" stroke-linecap="round" />
+  <!-- Biceps flexed & curled up (Lime green) -->
+  <path d="M52 42 L46 54 L52 46" stroke="#9EF01A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <path d="M68 42 L74 54 L68 46" stroke="#9EF01A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <!-- EZ Bar curled to chest -->
+  <path d="M42 46 L48 48 L72 48 L78 46" stroke="#a1a1aa" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <circle cx="40" cy="46" r="6" fill="#171C20" stroke="#9EF01A" stroke-width="1.5" />
+  <circle cx="80" cy="46" r="6" fill="#171C20" stroke="#9EF01A" stroke-width="1.5" />
+  <!-- Tag -->
+  <rect x="68" y="8" width="44" height="15" rx="4" fill="rgba(158, 240, 26, 0.15)" stroke="#9EF01A" stroke-width="0.8" />
+  <text x="90" y="19" text-anchor="middle" fill="#9EF01A" font-size="8" font-weight="bold" font-family="sans-serif">BÍCEPS</text>
+</svg>
+

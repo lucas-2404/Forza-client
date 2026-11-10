@@ -1,169 +1,84 @@
-import { useState, useEffect } from 'react';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+
+import { NavLink } from 'react-router-dom';
 import {
   HomeIcon,
   DumbbellIcon,
   CalendarIcon,
   ChartIcon,
   HeartIcon,
-  UserIcon,
-  LogoutIcon,
+  AppleIcon,
 } from './Icons';
 
-/**
- * Lista de rutas principales del Sidebar según el Diseño B de FORZA.
- */
+// Enlaces principales del Sidebar
 export const mainNavLinks = [
   { name: 'Inicio', path: '/', icon: HomeIcon, end: true },
   { name: 'Ejercicios', path: '/ejercicios', icon: DumbbellIcon },
   { name: 'Rutinas', path: '/rutinas', icon: CalendarIcon },
   { name: 'Progreso', path: '/dashboard', icon: ChartIcon },
   { name: 'Favoritos', path: '/favoritos', icon: HeartIcon },
+  { name: 'Alimentación', path: '/alimentacion', icon: AppleIcon },
 ];
 
-/**
- * Componente modular con los ítems de navegación.
- * Reutilizable tanto en el Sidebar fijo de escritorio como en el Offcanvas móvil.
- *
- * @param {Function} onItemClick - Callback opcional para cerrar el menú en móviles tras seleccionar una ruta.
- * @param {Function} onLogout - Callback opcional para conectar con el módulo de autenticación.
- */
-function NavigationItems({ onItemClick, onLogout }) {
-  const [usuario, setUsuario] = useState(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+// Clases Bootstrap reutilizadas para los enlaces
+const clasesEnlace =
+  'sidebar-link d-flex align-items-center gap-3 p-2 px-3 rounded-3 text-decoration-none w-100';
 
-  // Actualizar estado de sesión cada vez que cambia la ruta
-  useEffect(() => {
-    const usuarioGuardado = localStorage.getItem('forza_user');
-    if (usuarioGuardado) {
-      try {
-        setUsuario(JSON.parse(usuarioGuardado));
-      } catch {
-        setUsuario(null);
-      }
-    } else {
-      setUsuario(null);
-    }
-  }, [location]);
+function NavigationItems({ onItemClick }) {
 
+  // Cerrar el menú lateral en dispositivos móviles
   const handleClick = () => {
     if (onItemClick) {
       onItemClick();
     }
   };
 
-  const handleLogoutClick = (e) => {
-    e.preventDefault();
-    localStorage.removeItem('forza_token');
-    localStorage.removeItem('forza_user');
-    setUsuario(null);
-    if (onLogout) {
-      onLogout();
-    }
-    if (onItemClick) {
-      onItemClick();
-    }
-    navigate('/login');
-  };
+  // Aplicar la clase active cuando estamos en la ruta
+  const obtenerClaseEnlace = ({ isActive }) =>
+    isActive ? `${clasesEnlace} active` : clasesEnlace;
 
   return (
-    <div className="sidebar-nav-container">
-      {/* Navegación Principal */}
-      <nav className="sidebar-nav-main" aria-label="Navegación principal">
-        <ul className="sidebar-nav-list">
+    <div className="d-flex flex-column flex-grow-1 p-3">
+
+      {/* Navegación principal */}
+      <nav aria-label="Navegación principal">
+
+        <ul className="list-unstyled m-0 p-0 d-flex flex-column gap-1">
+
           {mainNavLinks.map((item) => {
             const IconComponent = item.icon;
+
             return (
-              <li key={item.path} className="sidebar-nav-item">
+              <li key={item.path} className="w-100">
+
                 <NavLink
                   to={item.path}
                   end={item.end}
-                  className={({ isActive }) =>
-                    isActive ? 'sidebar-link active' : 'sidebar-link'
-                  }
+                  className={obtenerClaseEnlace}
                   onClick={handleClick}
                 >
-                  <span className="sidebar-link-icon">
+                  <span
+                    className="d-inline-flex align-items-center justify-content-center flex-shrink-0"
+                    aria-hidden="true"
+                  >
                     <IconComponent size={20} />
                   </span>
-                  <span className="sidebar-link-text">{item.name}</span>
+
+                  <span className="flex-grow-1">
+                    {item.name}
+                  </span>
+
                 </NavLink>
+
               </li>
             );
           })}
+
         </ul>
+
       </nav>
 
-      {/* Separador inferior */}
-      <div className="sidebar-divider" role="separator" />
-
-      {/* Navegación Secundaria (Perfil, Login/Registro o Cerrar Sesión) */}
-      <div className="sidebar-nav-secondary">
-        <ul className="sidebar-nav-list">
-          <li className="sidebar-nav-item">
-            <NavLink
-              to="/perfil"
-              className={({ isActive }) =>
-                isActive ? 'sidebar-link active' : 'sidebar-link'
-              }
-              onClick={handleClick}
-            >
-              <span className="sidebar-link-icon">
-                <UserIcon size={20} />
-              </span>
-              <span className="sidebar-link-text">Mi Perfil</span>
-            </NavLink>
-          </li>
-
-          {usuario ? (
-            <li className="sidebar-nav-item">
-              <button
-                type="button"
-                className="sidebar-link sidebar-logout-btn"
-                onClick={handleLogoutClick}
-                aria-label="Cerrar sesión"
-              >
-                <span className="sidebar-link-icon">
-                  <LogoutIcon size={20} />
-                </span>
-                <span className="sidebar-link-text">Cerrar sesión</span>
-              </button>
-            </li>
-          ) : (
-            <>
-              <li className="sidebar-nav-item">
-                <NavLink
-                  to="/login"
-                  className={({ isActive }) =>
-                    isActive ? 'sidebar-link active' : 'sidebar-link'
-                  }
-                  onClick={handleClick}
-                >
-                  <span className="sidebar-link-icon">🔐</span>
-                  <span className="sidebar-link-text">Iniciar sesión</span>
-                </NavLink>
-              </li>
-
-              <li className="sidebar-nav-item">
-                <NavLink
-                  to="/registro"
-                  className={({ isActive }) =>
-                    isActive ? 'sidebar-link active' : 'sidebar-link'
-                  }
-                  onClick={handleClick}
-                >
-                  <span className="sidebar-link-icon">⚡</span>
-                  <span className="sidebar-link-text">Registrarse</span>
-                </NavLink>
-              </li>
-            </>
-          )}
-        </ul>
-      </div>
     </div>
   );
 }
 
 export default NavigationItems;
-

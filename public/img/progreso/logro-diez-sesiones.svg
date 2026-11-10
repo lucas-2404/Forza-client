@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgTrophy" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3b320c" />
+      <stop offset="100%" stop-color="#141105" />
+    </radialGradient>
+    <linearGradient id="goldCup" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="50%" stop-color="#eab308" />
+      <stop offset="100%" stop-color="#ca8a04" />
+    </linearGradient>
+    <filter id="cupGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="url(#bgTrophy)" stroke="#eab308" stroke-width="2" stroke-opacity="0.5" />
+  <!-- Laurel Wreath -->
+  <path d="M26 48 C24 64 36 78 50 82 C64 78 76 64 74 48" fill="none" stroke="#9EF01A" stroke-width="2.5" stroke-dasharray="3,3" />
+  <!-- Trophy Cup Handles -->
+  <path d="M34 32 C26 32 26 50 36 50" fill="none" stroke="#eab308" stroke-width="3" stroke-linecap="round" />
+  <path d="M66 32 C74 32 74 50 64 50" fill="none" stroke="#eab308" stroke-width="3" stroke-linecap="round" />
+  <!-- Trophy Cup Body -->
+  <path d="M34 26 L66 26 L64 50 C62 60 54 64 50 64 C46 64 38 60 36 50 Z" fill="url(#goldCup)" filter="url(#cupGlow)" />
+  <!-- Cup Base & Stem -->
+  <rect x="47" y="64" width="6" height="8" fill="#ca8a04" />
+  <rect x="38" y="72" width="24" height="6" rx="2" fill="#171C20" stroke="#eab308" stroke-width="1.5" />
+  <!-- '10' engraved on cup -->
+  <text x="50" y="46" text-anchor="middle" fill="#080B0D" font-size="13" font-weight="900" font-family="sans-serif">10</text>
+  <!-- Sparkles -->
+  <polygon points="50,18 51,21 54,21 52,23 53,26 50,24 47,26 48,23 46,21 49,21" fill="#FFFFFF" />
+  <polygon points="68,22 69,24 71,24 70,25 70,27 68,26 67,27 67,25 65,24 67,24" fill="#9EF01A" />
+</svg>
+

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <radialGradient id="ejBg4" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#24192d" />
+      <stop offset="100%" stop-color="#080B0D" />
+    </radialGradient>
+    <linearGradient id="deltsLime" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc" />
+      <stop offset="100%" stop-color="#9EF01A" />
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="16" fill="url(#ejBg4)" stroke="#2A3035" stroke-width="1.5" />
+  <!-- Dumbbells overhead -->
+  <rect x="26" y="22" width="16" height="5" rx="1.5" fill="#a1a1aa" />
+  <circle cx="27" cy="24.5" r="7" fill="#171C20" stroke="#9EF01A" stroke-width="1.5" />
+  <circle cx="41" cy="24.5" r="7" fill="#171C20" stroke="#9EF01A" stroke-width="1.5" />
+
+  <rect x="78" y="22" width="16" height="5" rx="1.5" fill="#a1a1aa" />
+  <circle cx="79" cy="24.5" r="7" fill="#171C20" stroke="#9EF01A" stroke-width="1.5" />
+  <circle cx="93" cy="24.5" r="7" fill="#171C20" stroke="#9EF01A" stroke-width="1.5" />
+
+  <!-- Athlete Head -->
+  <circle cx="60" cy="48" r="7" fill="#71717a" />
+  <!-- Arms pressing up to dumbbells -->
+  <path d="M48 60 L34 40 L34 26" stroke="#9EF01A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <path d="M72 60 L86 40 L86 26" stroke="#9EF01A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <!-- Broad Shoulders (Deltoids highlighted with lime) -->
+  <path d="M44 60 C48 56 72 56 76 60 L70 82 L50 82 Z" fill="url(#deltsLime)" />
+  <!-- Torso & Bench backrest -->
+  <line x1="60" y1="82" x2="60" y2="108" stroke="#3f3f46" stroke-width="8" stroke-linecap="round" />
+  <!-- Tag -->
+  <rect x="68" y="8" width="44" height="15" rx="4" fill="rgba(168, 85, 247, 0.15)" stroke="#a855f7" stroke-width="0.8" />
+  <text x="90" y="19" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="bold" font-family="sans-serif">HOMBROS</text>
+</svg>
+

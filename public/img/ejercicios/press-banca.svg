@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <radialGradient id="ejBg1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1c2514" />
+      <stop offset="100%" stop-color="#080B0D" />
+    </radialGradient>
+    <linearGradient id="barGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#52525b" />
+      <stop offset="50%" stop-color="#a1a1aa" />
+      <stop offset="100%" stop-color="#52525b" />
+    </linearGradient>
+    <linearGradient id="limeMuscle" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9EF01A" />
+      <stop offset="100%" stop-color="#65a30d" />
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="16" fill="url(#ejBg1)" stroke="#2A3035" stroke-width="1.5" />
+  <!-- Bench structure -->
+  <line x1="24" y1="84" x2="96" y2="84" stroke="#3f3f46" stroke-width="6" stroke-linecap="round" />
+  <line x1="36" y1="84" x2="36" y2="104" stroke="#27272a" stroke-width="5" />
+  <line x1="84" y1="84" x2="84" y2="104" stroke="#27272a" stroke-width="5" />
+  <!-- Athlete silhouette lying down -->
+  <path d="M34 78 C38 72 44 72 50 75 L74 75 C80 75 84 80 88 82" stroke="#71717a" stroke-width="7" stroke-linecap="round" fill="none" />
+  <!-- Head -->
+  <circle cx="28" cy="74" r="6" fill="#71717a" />
+  <!-- Chest highlight (lime green) -->
+  <ellipse cx="50" cy="72" rx="7" ry="5" fill="url(#limeMuscle)" opacity="0.9" />
+  <!-- Arms pressing up -->
+  <path d="M48 72 L44 52 L52 42" stroke="#9EF01A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <path d="M54 72 L66 52 L58 42" stroke="#9EF01A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <!-- Barbell -->
+  <line x1="16" y1="40" x2="104" y2="40" stroke="url(#barGrad)" stroke-width="4" stroke-linecap="round" />
+  <!-- Left Weight Plates -->
+  <rect x="20" y="24" width="6" height="32" rx="2" fill="#171C20" stroke="#9EF01A" stroke-width="1.5" />
+  <rect x="27" y="28" width="5" height="24" rx="2" fill="#27272a" stroke="#71717a" stroke-width="1" />
+  <!-- Right Weight Plates -->
+  <rect x="94" y="24" width="6" height="32" rx="2" fill="#171C20" stroke="#9EF01A" stroke-width="1.5" />
+  <rect x="88" y="28" width="5" height="24" rx="2" fill="#27272a" stroke="#71717a" stroke-width="1" />
+  <!-- Label tag -->
+  <rect x="76" y="8" width="36" height="15" rx="4" fill="rgba(158, 240, 26, 0.15)" stroke="#9EF01A" stroke-width="0.8" />
+  <text x="94" y="19" text-anchor="middle" fill="#9EF01A" font-size="8" font-weight="bold" font-family="sans-serif">PECHO</text>
+</svg>
+
